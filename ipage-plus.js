@@ -4,16 +4,16 @@
 // @version     0.4.6
 // @description Ingram ipage usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
-// @downloadURL https://web.haslams/ipage-plus.js
+// @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
 // @include     http*://ipage.ingramcontent.com/ipage/servlet/ibg.common.titledetail.*
 // @run-at      document-end
 // @require     https://code.jquery.com/jquery-latest.js
 // @require     https://thousandsparrows.com/js/colorbox/jquery.colorbox.js
 // @require     https://thousandsparrows.com/js/jquery.csv-0.71.js
-// @require     https://web.haslams/jquery.maskedinput.min.js
+// @require     https://thousandsparrows.com/jquery.maskedinput.min.js
 // @resource    https://thousandsparrows.com/js/colorbox/colorbox.css
-// @resource	https://web.haslams/jquery.form.min.js
-// @resource    https://web.haslams/form.css
+// @resource	https://thousandsparrows.com/jquery.form.min.js
+// @resource    https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @grant	GM_xmlhttpRequest
@@ -189,7 +189,7 @@ document.getElementsByTagName("HEAD")[0].appendChild(link);
 var link = window.document.createElement('link');
 link.rel = 'stylesheet';
 link.type = 'text/css';
-link.href = 'https://web.haslams/form.css';
+link.href = 'https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css';
 document.getElementsByTagName("HEAD")[0].appendChild(link);
 
 //////////////////////////
@@ -332,7 +332,7 @@ $(document).ready(function() {
         // Send the HTTP POST with the form data
         GM_xmlhttpRequest({
             method      : 'POST',
-            url         : 'https://web.haslams/special-order.php',
+            url         : '/special-order.php',
             data        : formData,
             headers		: { "Content-Type": "application/x-www-form-urlencoded" },
             dataType    : 'json',
