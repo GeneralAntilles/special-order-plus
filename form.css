@@ -1,0 +1,209 @@
+.special-order-form {
+	margin-left:auto;
+	margin-right:auto;
+	max-width: 950px;
+	background: #F7F7F7;
+	padding: 23px 15px 23px 10px;
+	font: 12px "Georgia", "Times New Roman", Times, serif;
+	color: #444;
+	text-shadow: 1px 1px 1px #FFF;
+	border:1px solid #E4E4E4;
+	overflow: auto;
+}
+
+.special-order-form h1 {
+	padding: 0px 0px 10px 40px;
+	display: block;
+	border-bottom:1px solid #E4E4E4;
+	margin: -10px -15px 10px -10px;;
+	color: #444;
+}
+
+.special-order-form h1>span {
+	display: block;
+}
+
+.special-order-form label {
+	display: block;
+	margin: 0px;
+}
+
+.special-order-form label>span {
+	float: left;
+	width: 25%;
+	text-align: right;
+	font-size: 1.4em;
+	padding-right: 10px;
+	margin-top: 10px;
+	color: #444;
+}
+
+label.checkbox {
+	width:100%;
+	height: 23px;
+	margin: 5px;
+	font-size: 1.4em
+}
+
+.special-order-form input[type="text"], .special-order-form input[type="email"], .special-order-form textarea, .special-order-form select, .special-order-form input[type="quantity"] {
+	border: 1px solid #DADADA;
+	color: #444;
+	height: 23px;
+	font-family: "Helvetica", "Arial", sans-serif;
+	margin-bottom: 8px;
+	margin-right: 6px;
+	margin-top: 2px;
+	outline: 0 none;
+	padding: 3px 3px 3px 5px;
+	width: 60%;
+	font-size: 1.4em;
+	box-shadow: inset 0px 1px 4px #ECECEC;
+	-moz-box-shadow: inset 0px 1px 4px #ECECEC;
+	-webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+}
+
+.special-order-form input[type="number"] {
+	border: 1px solid #DADADA;
+	color: #444;
+	height: 23px;
+	font-family: "Helvetica", "Arial", sans-serif;
+	margin-bottom: 8px;
+	margin-right: 6px;
+	margin-top: 2px;
+	outline: 0 none;
+	padding: 3px 3px 3px 5px;
+	width: 4em;
+	font-size: 1.4em;
+	box-shadow: inset 0px 1px 4px #ECECEC;
+	-moz-box-shadow: inset 0px 1px 4px #ECECEC;
+	-webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+}
+
+.special-order-form input[type="checkbox"] {
+	margin: 3px 7px 6px 26.5%;
+	vertical-align: middle;
+	width: 24px;
+	height: 24px;
+}
+
+.special-order-form input[type="tel"] {
+	border: 1px solid #DADADA;
+	color: #444;
+	height: 23px;
+	font-family: "Helvetica", "Arial", sans-serif;
+	margin-bottom: 8px;
+	margin-right: 6px;
+	margin-top: 2px;
+	outline: 0 none;
+	padding: 3px 3px 3px 5px;
+	width: 12em;
+	font-size: 1.4em;
+	box-shadow: inset 0px 1px 4px #ECECEC;
+	-moz-box-shadow: inset 0px 1px 4px #ECECEC;
+	-webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+}
+
+.special-order-form input[name="specialOrderInfo[zipCode]"] {
+	width: 4em;
+}
+
+.special-order-form textarea{
+	font-family: "Helvetica", "Arial", sans-serif;
+	padding: 5px 3px 3px 5px;
+}
+
+.special-order-form select {
+	background: #FFF url('down-arrow.png') no-repeat right;
+	background: #FFF url('down-arrow.png') no-repeat right);
+	appearance:none;
+	-webkit-appearance:none;
+	-moz-appearance: none;
+	text-indent: 0.01px;
+	text-overflow: '';
+	width: 60%;
+	height: 35px;
+	line-height: 23px;
+}
+
+.special-order-form textarea{
+	height:100px;
+}
+
+.special-order-form .button {
+	float: right;
+	background: #E27575;
+	border: none;
+	padding: 10px 23px 10px 23px;
+	color: #FFF;
+	box-shadow: 1px 1px 5px #B6B6B6;
+	border-radius: 3px;
+	text-shadow: 1px 1px 1px #9E3F3F;
+	cursor: pointer;
+}
+.special-order-form .button:hover {
+	background: #CF7A7A
+}
+
+.specialOrder {
+	font-size: 1.5em;
+	color: #55F;
+	border: 1px solid black;
+	border-radius: 4px 4px 4px 4px;
+	-moz-border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius: 4px 4px 4px 4px;
+	border: 1px solid gray !important;
+	box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.5);
+	padding: 0.1em 0.3em;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.cantBuy {
+	background-color: #ff7777;
+}
+
+.badDiscount {
+	color: red;
+}
+
+.canBuy {
+	background-color: #90EE90;
+}
+
+.returnable {
+	width: 100%;
+	color: green;
+	text-align: right;
+	font-weight: bold;
+	font-size: 130%;
+}
+
+.notReturnable {
+	width: 100%;
+	color: red;
+	text-align: right;
+	font-weight: bold;
+	font-size: 130%;
+}
+
+.tableWidth100 {
+	width: 100%;
+}
+	
+.no-ship {
+	opacity: 0.3;
+}
+
+#instructions {
+	margin-top: 1em;
+	width: 100%;
+	text-align: center;
+	color: #666;
+	font-size: 75%;
+}
+
+#instructions p {
+	margin: 0;
+	padding: 0;
+	line-height: 120%;
+}
