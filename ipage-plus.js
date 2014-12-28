@@ -8,9 +8,9 @@
 // @include     http*://ipage.ingramcontent.com/ipage/servlet/ibg.common.titledetail.*
 // @run-at      document-end
 // @require     https://code.jquery.com/jquery-latest.js
-// @require     https://thousandsparrows.com/js/colorbox/jquery.colorbox.js
+// @require     https://raw.githubusercontent.com/jackmoore/colorbox/master/jquery.colorbox-min.js
 // @require     https://thousandsparrows.com/js/jquery.csv-0.71.js
-// @require     https://thousandsparrows.com/jquery.maskedinput.min.js
+// @require     https://raw.githubusercontent.com/digitalBush/jquery.maskedinput/1.4.0/dist/jquery.maskedinput.min.js
 // @resource    https://thousandsparrows.com/js/colorbox/colorbox.css
 // @resource    https://thousandsparrows.com/jquery.form.min.js
 // @resource    https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css
