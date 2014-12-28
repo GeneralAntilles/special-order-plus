@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        ts360+
 // @namespace   http://www.haslams.com/
-// @version     0.5.3
+// @version     0.5.4
 // @description Baker & Taylor usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
 // @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
@@ -30,50 +30,50 @@ function injectjs(link) { $('<script type="text/javascript" src="'+link+'"/>').a
 
 // Check whether string ends with a supplied suffix
 function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+	return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
 // Calculate ISBN-10 check digit
 function isbnCheckDigit (isbn) {
-    var isbnArr = isbn.split('');
-    var sum = 0;
-    
-    // Get the sum of each number mulitplie by its position number (beginning with 10)
-    for( var i = 0, s = 10; i < 9; i++, s-- ) {
-        sum += ( isbnArr[ i ] * ( s ) );
-    }
-	
-    var chk = ( 11 - ( sum % 11 ) );
-    
-    // X shoudl be returned in place of 10
-    if ( chk === 10 ) { 
-        return 'X';
-    } else {
-    	return chk;
-    }
+	var isbnArr = isbn.split('');
+	var sum = 0;
+
+	// Get the sum of each number mulitplie by its position number (beginning with 10)
+	for( var i = 0, s = 10; i < 9; i++, s-- ) {
+		sum += ( isbnArr[ i ] * ( s ) );
+	}
+
+	var chk = ( 11 - ( sum % 11 ) );
+
+	// X shoudl be returned in place of 10
+	if ( chk === 10 ) { 
+		return 'X';
+	} else {
+		return chk;
+	}
 }
 
 // Store the form data to local storage
 function archiveLocalStorage() {
-    // Clear the previously stored values
-    localStorage.clear();
-    
-    // Get the values from the form and store them
-    $('.stored').each(function () {
-        // Only if the form field is non-empty
-        if ( $(this).val() !== "" ) {
-            localStorage[$(this).attr('name')] = $(this).val();
-        }
-    });
+	// Clear the previously stored values
+	localStorage.clear();
+
+	// Get the values from the form and store them
+	$('.stored').each(function () {
+		// Only if the form field is non-empty
+		if ( $(this).val() !== "" ) {
+			localStorage[$(this).attr('name')] = $(this).val();
+		}
+	});
 }
 
 // Toggle the disabled attribute on an HTML element
 (function($) {
-    $.fn.toggleDisabled = function(){
-        return this.each(function(){
-            this.disabled = !this.disabled;
-        });
-    };
+	$.fn.toggleDisabled = function(){
+		return this.each(function(){
+			this.disabled = !this.disabled;
+		});
+	};
 })(jQuery);
 
 //////////////////////////
@@ -94,48 +94,48 @@ var $bookInfo = {};
 
 // Wait until the window DOM is loaded, then start grabbing info
 $(window).load(function() {
-    // Grab a variety of info about the current title
-    $bookInfo.ean13 = $.trim( $( '.col1:contains("ISBN:")' ).next().text() );
-    $bookInfo.title = $( '#ctl00_BrowseBodyInner_ProductDetailsUserControl_lblTitle' ).text();
-    $bookInfo.publisher = $.trim( $( '.col1:contains("Publisher:")' ).next().text() );
-    $bookInfo.binding = $.trim( $( '#ctl00_BrowseBodyInner_ProductDetailsUserControl_formatLiteral' ).text() );
-    $bookInfo.date = $.trim( $( '.col3:contains("Street Date")' ).next().text() );
-    $bookInfo.authors = $( "#ctl00_BrowseBodyInner_ProductDetailsUserControl_authors" ).text().split( "/" );
+	// Grab a variety of info about the current title
+	$bookInfo.ean13 = $.trim( $( '.col1:contains("ISBN:")' ).next().text() );
+	$bookInfo.title = $( '#ctl00_BrowseBodyInner_ProductDetailsUserControl_lblTitle' ).text();
+	$bookInfo.publisher = $.trim( $( '.col1:contains("Publisher:")' ).next().text() );
+	$bookInfo.binding = $.trim( $( '#ctl00_BrowseBodyInner_ProductDetailsUserControl_formatLiteral' ).text() );
+	$bookInfo.date = $.trim( $( '.col3:contains("Street Date")' ).next().text() );
+	$bookInfo.authors = $( "#ctl00_BrowseBodyInner_ProductDetailsUserControl_authors" ).text().split( "/" );
 
-    // If we have multiple authors, we want to put them in an array
-    $.each($bookInfo.authors, function( k, v ) {
-        $bookInfo.authors[ k ] = $.trim( v );
-    });
+	// If we have multiple authors, we want to put them in an array
+	$.each($bookInfo.authors, function( k, v ) {
+		$bookInfo.authors[ k ] = $.trim( v );
+	});
 
-    // Also set the primary author
-    $bookInfo.author = $bookInfo.authors[ 0 ];
-    $bookInfo.price = "$" + unsafeWindow.id_listprice.slice( 0, -2 );
-    
-    // Build the ISBN from the ISBN-13
-    $bookInfo.isbn = $bookInfo.ean13.substring( 3 ).substring( 0, 9 );
-    $bookInfo.isbn = $bookInfo.isbn + isbnCheckDigit( $bookInfo.isbn );
+	// Also set the primary author
+	$bookInfo.author = $bookInfo.authors[ 0 ];
+	$bookInfo.price = "$" + unsafeWindow.id_listprice.slice( 0, -2 );
 
-    // Set the hidden form fields with the data we just grabbed
-    $bookInfoIndex = Object.keys( $bookInfo );
-    for( var i = 0; i < $bookInfoIndex.length; i++ ) {
-        $( "#" + $bookInfoIndex[ i ] ).val( $bookInfo[ $bookInfoIndex[ i ] ] );
-    }
+	// Build the ISBN from the ISBN-13
+	$bookInfo.isbn = $bookInfo.ean13.substring( 3 ).substring( 0, 9 );
+	$bookInfo.isbn = $bookInfo.isbn + isbnCheckDigit( $bookInfo.isbn );
+
+	// Set the hidden form fields with the data we just grabbed
+	$bookInfoIndex = Object.keys( $bookInfo );
+	for( var i = 0; i < $bookInfoIndex.length; i++ ) {
+		$( "#" + $bookInfoIndex[ i ] ).val( $bookInfo[ $bookInfoIndex[ i ] ] );
+	}
 });
 
 // Have to wait for the AJAX to complete before we can get the inventory info
 $(window).load(function () {
-    waitForKeyElements( $('.col1:contains("Momence")'), function(jNode) {
-        var momenceAvail = $.trim(jNode.next().text());
-        var momenceOrder = $.trim(jNode.next().next().text());
-        $( "#momenceAvail" ).val( momenceAvail );
-        $( "#momenceOrder" ).val( momenceOrder );
+	waitForKeyElements( $('.col1:contains("Momence")'), function(jNode) {
+		var momenceAvail = $.trim(jNode.next().text());
+		var momenceOrder = $.trim(jNode.next().next().text());
+		$( "#momenceAvail" ).val( momenceAvail );
+		$( "#momenceOrder" ).val( momenceOrder );
 	});
-    
-    waitForKeyElements( $('.col1:contains("Commerce")'), function(jNode) {
-        var commerceAvail = $.trim(jNode.next().text());
-        var commerceOrder = $.trim(jNode.next().next().text());
-        $( "#commerceAvail" ).val( commerceAvail );
-        $( "#commerceOrder" ).val( commerceOrder );
+
+	waitForKeyElements( $('.col1:contains("Commerce")'), function(jNode) {
+		var commerceAvail = $.trim(jNode.next().text());
+		var commerceOrder = $.trim(jNode.next().next().text());
+		$( "#commerceAvail" ).val( commerceAvail );
+		$( "#commerceOrder" ).val( commerceOrder );
 	});
 });
 
@@ -215,32 +215,32 @@ document.getElementsByTagName("HEAD")[0].appendChild(link);
 
 // Focus the first text field on the special order form when the form is activated
 $(document).ready(function() { 
-    // Do this when the special order link is activated
-    $("#soFormButton").bind("click",function() {
-        setTimeout(function() {
-            // Need to delay about 400 ms for the form to finish fading in
-            $('#firstName').focus();}, 400); 
-    });
+	// Do this when the special order link is activated
+	$("#soFormButton").bind("click",function() {
+		setTimeout(function() {
+			// Need to delay about 400 ms for the form to finish fading in
+			$('#firstName').focus();}, 400); 
+	});
 });
 
 // Show the colorbox for the special order form
 $(document).ready(function() {
-    $(".specialOrder").colorbox({inline:true, width:"85%"});
+	$(".specialOrder").colorbox({inline:true, width:"85%"});
 });
 
 // Toggle the shipping fields on click
 $(document).ready(function() {
-    $('#shipping').click(function(e) {      
-        $('.ship').toggleClass('no-ship',this.checked);
-        $("[name*='orderInfo[ship']").toggleDisabled().val("");
-        var $chkb = $(':checkbox', this)[0];
-        if(e.target !== $chkb) $chkb.checked = !$chkb.checked; 
-    });
+	$('#shipping').click(function(e) {      
+		$('.ship').toggleClass('no-ship',this.checked);
+		$("[name*='orderInfo[ship']").toggleDisabled().val("");
+		var $chkb = $(':checkbox', this)[0];
+		if(e.target !== $chkb) $chkb.checked = !$chkb.checked; 
+	});
 });
 
 // Input mask for the telephone fields
 $(document).ready(function() {
-        $( "input[type=tel]" ).mask( "(999) 999-9999",{placeholder:"_"} );
+	$( "input[type=tel]" ).mask( "(999) 999-9999",{placeholder:"_"} );
 });
 
 //////////////////////////
@@ -249,26 +249,26 @@ $(document).ready(function() {
 
 // Store the form data to local storage when the form is submitted 
 $(document).ready(function() {
-    $('#soSubmit').click(function(e) {
-        archiveLocalStorage();
-    });
+	$('#soSubmit').click(function(e) {
+		archiveLocalStorage();
+	});
 });
 
 // If the first name is an '=', then retrieve local storage and fill the form
 $(document).ready(function () {
-    $('#firstName').keyup(function () {
-        if ( $(this).val() == "=" ) {
-            for ( var i = 0; i < localStorage.length; i++ ) {
-                $("[name='" + localStorage.key(i) + "']").val(localStorage.getItem(localStorage.key(i)));
-            }
-            
-            if ( localStorage.getItem( 'orderInfo[shipFirstName]' ) ) {
-                $('.ship').toggleClass('no-ship');
-                $("[name*='orderInfo[ship']").toggleDisabled();
-                $("#shipCheck").prop( "checked", true );
-            }
-        }
-    });
+	$('#firstName').keyup(function () {
+		if ( $(this).val() == "=" ) {
+			for ( var i = 0; i < localStorage.length; i++ ) {
+				$("[name='" + localStorage.key(i) + "']").val(localStorage.getItem(localStorage.key(i)));
+			}
+
+			if ( localStorage.getItem( 'orderInfo[shipFirstName]' ) ) {
+				$('.ship').toggleClass('no-ship');
+				$("[name*='orderInfo[ship']").toggleDisabled();
+				$("#shipCheck").prop( "checked", true );
+			}
+		}
+	});
 });
 
 //////////////////////////
@@ -284,7 +284,7 @@ $discountReg = $('#discountPercentLiteral:contains("43")').length > 0 ? true : f
 
 // Indicate on the page if the discount is not regular wholesale
 if (!$discountReg) {
-    $('body').addClass("cantBuy");
+	$('body').addClass("cantBuy");
 }
 
 //////////////////////////
@@ -293,7 +293,7 @@ if (!$discountReg) {
 
 // The HTML for the special order form button
 if ( true ) {
-    $(".ms-sitemapdirectional").before( '<div style="float: right; margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
+	$(".ms-sitemapdirectional").before( '<div style="float: right; margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
 }
 
 //////////////////////////
@@ -302,27 +302,27 @@ if ( true ) {
 
 // AJAX to submit the form data
 $(document).ready(function() {
-    $("#specialOrderForm").submit(function(e) {
-        e.preventDefault();
+	$("#specialOrderForm").submit(function(e) {
+		e.preventDefault();
 
-        // Process the form data so we can POST it
-        var formData = $.param($(this).serializeArray());
+		// Process the form data so we can POST it
+		var formData = $.param($(this).serializeArray());
 
-        // Send the HTTP POST with the form data
-        GM_xmlhttpRequest({
-            method      : 'POST',
-            url         : 'special-order.php',
-            data        : formData,
-            headers		: { "Content-Type": "application/x-www-form-urlencoded" },
-            dataType    : 'json',
-            encode      : true,
-            onprogress	: function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+		// Send the HTTP POST with the form data
+		GM_xmlhttpRequest({
+			method      : 'POST',
+			url         : 'special-order.php',
+			data        : formData,
+			headers		: { "Content-Type": "application/x-www-form-urlencoded" },
+			dataType    : 'json',
+			encode      : true,
+			onprogress	: function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
 						   Sending...</h1>"); },
-            onload		: function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+			onload		: function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
 						   Success!</h1>");
-                           $.colorbox.close(); },
-            onerror		: function(response) { console.log(response.responseText); }
-        })
-    });
+						   $.colorbox.close(); },
+			onerror		: function(response) { console.log(response.responseText); }
+		})
+	});
 });
 

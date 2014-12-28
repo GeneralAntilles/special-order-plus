@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        ipage+
 // @namespace   http://www.haslams.com/
-// @version     0.4.6
+// @version     0.4.7
 // @description Ingram ipage usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
 // @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
@@ -12,12 +12,12 @@
 // @require     https://thousandsparrows.com/js/jquery.csv-0.71.js
 // @require     https://thousandsparrows.com/jquery.maskedinput.min.js
 // @resource    https://thousandsparrows.com/js/colorbox/colorbox.css
-// @resource	https://thousandsparrows.com/jquery.form.min.js
+// @resource    https://thousandsparrows.com/jquery.form.min.js
 // @resource    https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
-// @grant	GM_xmlhttpRequest
-// @grant	unsafeWindow
+// @grant       GM_xmlhttpRequest
+// @grant       unsafeWindow
 // ==/UserScript==
 
 //////////////////////////
@@ -29,40 +29,40 @@ function injectjs(link) { $('<script type="text/javascript" src="'+link+'"/>').a
 
 // Check whether string ends with a supplied suffix
 function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+	return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
 // Store the form data to local storage
 function archiveLocalStorage() {
-    // Clear the previously stored values
-    localStorage.clear();
-    
-    // Get the values from the form and store them
-    $('.stored').each(function () {
-        // Only if the form field is non-empty
-        if ( $(this).val() !== "" ) {
-            localStorage[$(this).attr('name')] = $(this).val();
-        }
-    });
+	// Clear the previously stored values
+	localStorage.clear();
+
+	// Get the values from the form and store them
+	$('.stored').each(function () {
+		// Only if the form field is non-empty
+		if ( $(this).val() !== "" ) {
+			localStorage[$(this).attr('name')] = $(this).val();
+		}
+	});
 }
 
 // Focus the first text field on the special order form when the form is activated
 $(document).ready(function() { 
-    // Do this when the special order link is activated
-    $("#soFormButton").bind("click",function() {
-        setTimeout(function() {
-            // Need to delay about 400 ms for the form to finish fading in
-            $('#firstName').focus();}, 400); 
-    });
+	// Do this when the special order link is activated
+	$("#soFormButton").bind("click",function() {
+		setTimeout(function() {
+			// Need to delay about 400 ms for the form to finish fading in
+			$('#firstName').focus();}, 400); 
+	});
 });
 
 // Toggle the disabled attribute on an HTML element
 (function($) {
-    $.fn.toggleDisabled = function(){
-        return this.each(function(){
-            this.disabled = !this.disabled;
-        });
-    };
+	$.fn.toggleDisabled = function(){
+		return this.each(function(){
+			this.disabled = !this.disabled;
+		});
+	};
 })(jQuery);
 
 //////////////////////////
@@ -80,7 +80,7 @@ var $availableUS;
 
 // Grab the ISBN from the table
 var $isbn = $('.productDetailElements').first().contents().filter(function() {
-    return this.nodeType == 3;
+	return this.nodeType == 3;
 }).text().substring(1,11);
 
 // Grab Ingram's ttlid for the entry from the HTML
@@ -88,7 +88,7 @@ var $ttlid = $( "[name='ttlid']" ).attr("value");
 
 // Get the binding information
 var binding = $.trim($('.productDetailElements:contains("Binding")').contents().filter(function() {
-    return this.nodeType == 3;
+	return this.nodeType == 3;
 }).text());
 
 // Index for the CSV we're getting from Ingram
@@ -198,17 +198,17 @@ document.getElementsByTagName("HEAD")[0].appendChild(link);
 
 // Show the colorbox for the special order form
 $(document).ready(function(){
-    $(".specialOrder").colorbox({inline:true, width:"85%"});
+	$(".specialOrder").colorbox({inline:true, width:"85%"});
 });
 
 // Toggle the shipping fields on click
 $(document).ready(function() {
-    $('#shipping').click(function(e) {      
-        $('.ship').toggleClass('no-ship',this.checked);
-        $("[name*='orderInfo[ship']").toggleDisabled().val("");
-        var $chkb = $(':checkbox', this)[0];
-        if(e.target !== $chkb) $chkb.checked = !$chkb.checked; 
-    });
+	$('#shipping').click(function(e) {      
+		$('.ship').toggleClass('no-ship',this.checked);
+		$("[name*='orderInfo[ship']").toggleDisabled().val("");
+		var $chkb = $(':checkbox', this)[0];
+		if(e.target !== $chkb) $chkb.checked = !$chkb.checked; 
+	});
 });
 
 //////////////////////////
@@ -217,26 +217,26 @@ $(document).ready(function() {
 
 // Store the form data to local storage when the form is submitted 
 $(document).ready(function() {
-    $('#soSubmit').click(function(e) {
-        archiveLocalStorage();
-    });
+	$('#soSubmit').click(function(e) {
+		archiveLocalStorage();
+	});
 });
 
 // If the first name is an '=', then retrieve local storage and fill the form
 $(document).ready(function () {
-    $('#firstName').keyup(function () {
-        if ( $(this).val() == "=" ) {
-            for ( var i = 0; i < localStorage.length; i++ ) {
-                $("[name='" + localStorage.key(i) + "']").val(localStorage.getItem(localStorage.key(i)));
-            }
-            
-            if ( localStorage.getItem( 'orderInfo[shipFirstName]' ) ) {
-                $('.ship').toggleClass('no-ship');
-                $("[name*='orderInfo[ship']").toggleDisabled();
-                $("#shipCheck").prop( "checked", true );
-            }
-        }
-    });
+	$('#firstName').keyup(function () {
+		if ( $(this).val() == "=" ) {
+			for ( var i = 0; i < localStorage.length; i++ ) {
+				$("[name='" + localStorage.key(i) + "']").val(localStorage.getItem(localStorage.key(i)));
+			}
+
+			if ( localStorage.getItem( 'orderInfo[shipFirstName]' ) ) {
+				$('.ship').toggleClass('no-ship');
+				$("[name*='orderInfo[ship']").toggleDisabled();
+				$("#shipCheck").prop( "checked", true );
+			}
+		}
+	});
 });
 
 //////////////////////////
@@ -258,23 +258,23 @@ $returnable = $( 'p:contains("This item is Not Returnable")' ).length > 0 ? fals
 
 // Indicate on the page whether it's returnable or not
 if ($returnable) {
-    $("td").filter(function() { return $.trim($(this).html()) == '&nbsp;'; }).replaceWith( '<td colspan="2"><h3 class="returnable">Returnable</h3></td>' );
+	$("td").filter(function() { return $.trim($(this).html()) == '&nbsp;'; }).replaceWith( '<td colspan="2"><h3 class="returnable">Returnable</h3></td>' );
 } else {
-    $("td").filter(function() { return $.trim($(this).html()) == '&nbsp;'; }).replaceWith( '<td colspan="2"><h3 class="notReturnable">Not Returnable</h3></td>' );
+	$("td").filter(function() { return $.trim($(this).html()) == '&nbsp;'; }).replaceWith( '<td colspan="2"><h3 class="notReturnable">Not Returnable</h3></td>' );
 }
 
 // Indicate on the page if it isn't available in the US
 if (!$availableUS) {
-    if (!$returnable) {
-        $("h3.notReturnable").after( '<h3 class="notReturnable">Not available in the US</h3>' );
-    } else {
-        $("h3.returnable").after( '<h3 class="notReturnable">Not available in the US</h3>' );
-    }
+	if (!$returnable) {
+		$("h3.notReturnable").after( '<h3 class="notReturnable">Not available in the US</h3>' );
+	} else {
+		$("h3.returnable").after( '<h3 class="notReturnable">Not available in the US</h3>' );
+	}
 }
 
 // Indicate on the page if the discount is not regular wholesale
 if (!$discountReg) {
-    $('body').addClass("cantBuy");
+	$('body').addClass("cantBuy");
 }
 
 //////////////////////////
@@ -283,7 +283,7 @@ if (!$discountReg) {
 
 // The HTML for the special order form button
 if ( $availableUS && $discountReg ) {
-    $(".mastHeadContainer").after( '<div style="margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
+	$(".mastHeadContainer").after( '<div style="margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
 }
 
 //////////////////////////
@@ -292,29 +292,31 @@ if ( $availableUS && $discountReg ) {
 
 // Send the POST request for the title listing's CSV and do processing
 $(document).ready(function(){
-    $.ajax({
-        url: '/ipage/servlet/ibg.common.titledetail.Download',
-        dataType: 'text',
-        method: 'post',
-        contentType: 'application/x-www-form-urlencoded',
-        // This it the POST string for the CSV, ttlid is scraped then inserted here
-        data: "select6=ASCD&ttlid=" + $ttlid + "&download.x=40&download.y=9&download=Download" ,
-        success: function( data, textStatus, jQxhr ){
-            // Feed the CSV into an array
-            var $ttlidCSV = $.csv.toArray(data);
-            // Add a dollar sign to the price
-            $ttlidCSV[ 7 ] =  "$" + $.trim($ttlidCSV[ 7 ]);
-            // Feed the array into an associative array
-            for ( var i = 0; i < 8; i++ ) {
-                $orderInfo[ $orderInfoIndex[ i ] ] = $ttlidCSV[ i ]; 
-                $('#' + $orderInfoIndex[ i ]).val( $orderInfo[ $orderInfoIndex[i] ] );
-            }
-        },
-        error: function( jqXhr, textStatus, errorThrown ){
-            console.log( "CSV request error" );
-            console.log( errorThrown );
-        }
-    });
+	$.ajax({
+		url         : '/ipage/servlet/ibg.common.titledetail.Download',
+		dataType    : 'text',
+		method      : 'post',
+		contentType : 'application/x-www-form-urlencoded',
+		// This it the POST string for the CSV, ttlid is scraped then inserted here
+		data        : "select6=ASCD&ttlid=" + $ttlid + "&download.x=40&download.y=9&download=Download" ,
+		success     : function( data, textStatus, jQxhr ){
+			// Feed the CSV into an array
+			var $ttlidCSV = $.csv.toArray(data);
+
+			// Add a dollar sign to the price
+			$ttlidCSV[ 7 ] =  "$" + $.trim($ttlidCSV[ 7 ]);
+
+			// Feed the array into an associative array
+			for ( var i = 0; i < 8; i++ ) {
+				$orderInfo[ $orderInfoIndex[ i ] ] = $ttlidCSV[ i ]; 
+				$('#' + $orderInfoIndex[ i ]).val( $orderInfo[ $orderInfoIndex[i] ] );
+			}
+		},
+		error       : function( jqXhr, textStatus, errorThrown ){
+			console.log( "CSV request error" );
+			console.log( errorThrown );
+		}
+	});
 });
 
 //////////////////////////
@@ -323,35 +325,35 @@ $(document).ready(function(){
 
 // AJAX to submit the form data
 $(document).ready(function() {
-    $("#specialOrderForm").submit(function(e) {
-        e.preventDefault();
+	$("#specialOrderForm").submit(function(e) {
+		e.preventDefault();
 
-        // Process the form data so we can POST it
-        var formData = $.param($(this).serializeArray());
+		// Process the form data so we can POST it
+		var formData = $.param($(this).serializeArray());
 
-        // Send the HTTP POST with the form data
-        GM_xmlhttpRequest({
-            method      : 'POST',
-            url         : '/special-order.php',
-            data        : formData,
-            headers		: { "Content-Type": "application/x-www-form-urlencoded" },
-            dataType    : 'json',
-            encode      : true,
-            onprogress	: function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-						   Sending...</h1>"); },
-            onload		: function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-						   Success!</h1>");
-                           $.colorbox.close(); },
-            onerror		: function(response) { console.log(response.responseText); }
-        })
-    });
+		// Send the HTTP POST with the form data
+		GM_xmlhttpRequest({
+			method      : 'POST',
+			url         : '/special-order.php',
+			data        : formData,
+			headers     : { "Content-Type": "application/x-www-form-urlencoded" },
+			dataType    : 'json',
+			encode      : true,
+			onprogress  : function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+                            Sending...</h1>"); },
+			onload      : function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+                            Success!</h1>");
+                            $.colorbox.close(); },
+			onerror     : function(response) { console.log(response.responseText); }
+		})
+	});
 });
 
 $(document).ready(function() {
-        $( "input[type=tel]" ).mask( "(999) 999-9999",{placeholder:"_"} );
+	$( "input[type=tel]" ).mask( "(999) 999-9999",{placeholder:"_"} );
 });
 
 $(document).ready(function() {
-    var btUrl = "http://ts360.baker-taylor.com/pages/searchresults.aspx?keyword=" + $isbn;
-    $("<a href='" + btUrl + "' accesskey='b' target='_blank'>Check on B&T</a>").appendTo("body");
+	var btUrl = "http://ts360.baker-taylor.com/pages/searchresults.aspx?keyword=" + $isbn;
+	$("<a href='" + btUrl + "' accesskey='b' target='_blank'>Check on B&T</a>").appendTo("body");
 });
