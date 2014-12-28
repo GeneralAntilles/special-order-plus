@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        ts360+
 // @namespace   http://www.haslams.com/
-// @version     0.5.4
+// @version     0.5.5
 // @description Baker & Taylor usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
 // @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
@@ -206,6 +206,11 @@ link.type = 'text/css';
 link.href = 'https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css';
 document.getElementsByTagName("HEAD")[0].appendChild(link);
 
+// The HTML for the special order form button
+if ( true ) {
+	$(".ms-sitemapdirectional").before( '<div style="float: right; margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
+}
+
 //////////////////////////
 //       Form js        //
 //////////////////////////
@@ -269,6 +274,36 @@ $(document).ready(function () {
 });
 
 //////////////////////////
+//     Submit form      //
+//////////////////////////
+
+// AJAX to submit the form data
+$(document).ready(function() {
+	$("#specialOrderForm").submit(function(e) {
+		e.preventDefault();
+
+		// Process the form data so we can POST it
+		var formData = $.param($(this).serializeArray());
+
+		// Send the HTTP POST with the form data
+		GM_xmlhttpRequest({
+			method      : 'POST',
+			url         : '/special-order.php',
+			data        : formData,
+			headers     : { "Content-Type": "application/x-www-form-urlencoded" },
+			dataType    : 'json',
+			encode      : true,
+			onprogress  : function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+                            Sending...</h1>"); },
+			onload      : function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+                            Success!</h1>");
+                            $.colorbox.close(); },
+			onerror     : function(response) { console.log(response.responseText); }
+		})
+	});
+});
+
+//////////////////////////
 //   Page indicators    //
 //////////////////////////
 
@@ -283,43 +318,3 @@ $discountReg = $('#discountPercentLiteral:contains("43")').length > 0 ? true : f
 if (!$discountReg) {
 	$('body').addClass("cantBuy");
 }
-
-//////////////////////////
-//    Special order     //
-//////////////////////////
-
-// The HTML for the special order form button
-if ( true ) {
-	$(".ms-sitemapdirectional").before( '<div style="float: right; margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
-}
-
-//////////////////////////
-//       Testing        //
-//////////////////////////
-
-// AJAX to submit the form data
-$(document).ready(function() {
-	$("#specialOrderForm").submit(function(e) {
-		e.preventDefault();
-
-		// Process the form data so we can POST it
-		var formData = $.param($(this).serializeArray());
-
-		// Send the HTTP POST with the form data
-		GM_xmlhttpRequest({
-			method      : 'POST',
-			url         : 'special-order.php',
-			data        : formData,
-			headers		: { "Content-Type": "application/x-www-form-urlencoded" },
-			dataType    : 'json',
-			encode      : true,
-			onprogress	: function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-						   Sending...</h1>"); },
-			onload		: function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-						   Success!</h1>");
-						   $.colorbox.close(); },
-			onerror		: function(response) { console.log(response.responseText); }
-		})
-	});
-});
-

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        ipage+
 // @namespace   http://www.haslams.com/
-// @version     0.4.7
+// @version     0.4.8
 // @description Ingram ipage usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
 // @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
@@ -189,6 +189,17 @@ link.type = 'text/css';
 link.href = 'https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css';
 document.getElementsByTagName("HEAD")[0].appendChild(link);
 
+// Add a link to this entry on Baker & Taylor
+$(document).ready(function() {
+	var btUrl = "http://ts360.baker-taylor.com/pages/searchresults.aspx?keyword=" + $isbn;
+	$("<a href='" + btUrl + "' accesskey='b' target='_blank'>Check on B&T</a>").appendTo("body");
+});
+
+// The HTML for the special order form button
+if ( $availableUS && $discountReg ) {
+	$(".mastHeadContainer").after( '<div style="margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
+}
+
 //////////////////////////
 //       Form js        //
 //////////////////////////
@@ -206,6 +217,10 @@ $(document).ready(function() {
 		var $chkb = $(':checkbox', this)[0];
 		if(e.target !== $chkb) $chkb.checked = !$chkb.checked; 
 	});
+});
+
+$(document).ready(function() {
+	$( "input[type=tel]" ).mask( "(999) 999-9999",{placeholder:"_"} );
 });
 
 //////////////////////////
@@ -275,15 +290,6 @@ if (!$discountReg) {
 }
 
 //////////////////////////
-//    Special order     //
-//////////////////////////
-
-// The HTML for the special order form button
-if ( $availableUS && $discountReg ) {
-	$(".mastHeadContainer").after( '<div style="margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
-}
-
-//////////////////////////
 //    Query for CSV     //
 //////////////////////////
 
@@ -344,13 +350,4 @@ $(document).ready(function() {
 			onerror     : function(response) { console.log(response.responseText); }
 		})
 	});
-});
-
-$(document).ready(function() {
-	$( "input[type=tel]" ).mask( "(999) 999-9999",{placeholder:"_"} );
-});
-
-$(document).ready(function() {
-	var btUrl = "http://ts360.baker-taylor.com/pages/searchresults.aspx?keyword=" + $isbn;
-	$("<a href='" + btUrl + "' accesskey='b' target='_blank'>Check on B&T</a>").appendTo("body");
 });
