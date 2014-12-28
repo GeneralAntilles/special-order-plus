@@ -1,10 +1,29 @@
 # Special Order System
 
-*Updated December 24th, 2014*
+*Updated December 27th, 2014*
 
 ## Purpose
 
-The special order system faciliates taking special orders through the Ingram ipage and Baker & Taylor Title Source 360 web databases by providing a special order HTML form on these websites.
+The special order system faciliates taking special orders through the [Ingram ipage](https://ipage.ingramcontent.com/) and [Baker & Taylor Title Source 360](https://ts360.baker-taylor.com/) web databases by providing a HTML form on these websites and a printing backend.
+
+## Requirements
+
+1. Web server capable of running PHP.
+2. A userscript plugin like [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) or [Greasemonkey](http://www.greasespot.net/) (not tested in Firefox, though).
+3. The [pdftk](https://www.pdflabs.com/tools/pdftk-server/) tool for filling the PDF forms and stamping barcodes.
+4. [GNU barcode](https://www.pdflabs.com/tools/gnu-barcode-plus-pdf/) patched with PDF support.
+
+## Installation
+
+It's not quite ready for prime-time, but eager testers will need to ensure that all of the requirements are met then:
+
+1. Install the userscripts on your client browsers (ipage-plus.js for Ingram and ts360-plus.js for Baker & Taylor).
+2. Put special-order.php on a web server.
+3. Edit ipage-plus.js and ts360-plus.js to point to the appropriate URL for special-order.php (there's no setting for this yet).
+4. Provide a PDF form template to be filled by special-order.php (a default template will be uploaded at some point).
+5. Hit it until it works.
+
+It's at the bailing wire and good intentions stage of development right now, so there will probably be a lot of hitting.
 
 ## Architecture
 
