@@ -24,9 +24,6 @@
 //      Functions       //
 //////////////////////////
 
-// Function to inject our js links into the document head
-function injectjs(link) { $('<script type="text/javascript" src="'+link+'"/>').appendTo($('head')); }
-
 // Check whether string ends with a supplied suffix
 function endsWith(str, suffix) {
 	return str.indexOf(suffix, str.length - suffix.length) !== -1;
