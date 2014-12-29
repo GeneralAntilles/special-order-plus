@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        ipage+
 // @namespace   http://www.haslams.com/
-// @version     0.4.8
+// @version     0.4.9
 // @description Ingram ipage usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
 // @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
@@ -255,11 +255,11 @@ $(document).ready(function () {
 //   Page indicators    //
 //////////////////////////
 
-// Check to see if the discount is a normal, wholesale discount and set the variable accordingly.
+// Check to see if the discount is a normal, wholesale discount and set the variable.
 $discountReg = $( 'div:contains("REG")' ).length > 0 || $( 'div:contains("45%")' ).length > 0 ? true : false;
 
-// Check to see if it's available in the US
-$availableUS = $( 'p:contains("Available in some countries but not the United States.")' ).length > 0 ? false : true;
+// Check to see if it's available
+$availableUS = $( 'p:contains("Available in some countries but not the United States.")' ).length > 0 || $( 'p:contains("Restricted:  Not available to all customers.")' ).length > 0 ? false : true;
 
 // Check to see if it's returnable
 $returnable = $( 'p:contains("This item is Not Returnable")' ).length > 0 ? false : true;
