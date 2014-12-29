@@ -1,10 +1,10 @@
-# Special Order System
+# Special Order Plus
 
-*Updated December 27th, 2014*
+*Updated December 28th, 2014*
 
 ## Purpose
 
-The special order system faciliates taking special orders through the [Ingram ipage](https://ipage.ingramcontent.com/) and [Baker & Taylor Title Source 360](https://ts360.baker-taylor.com/) web databases by providing a HTML form on these websites and a printing backend.
+Special Order Plus faciliates taking special orders through the [Ingram ipage](https://ipage.ingramcontent.com/) and [Baker & Taylor Title Source 360](https://ts360.baker-taylor.com/) web databases by providing a HTML form on these websites and a printing backend.
 
 ## Requirements
 
