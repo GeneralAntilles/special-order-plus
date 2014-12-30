@@ -32,7 +32,7 @@ function endsWith( str, suffix ) {
 
 // Calculate ISBN-10 check digit
 function isbnCheckDigit ( isbn ) {
-	var isbnArr = isbn.split( '' );
+	var isbnArr = isbn.split( "" );
 	var sum = 0;
 
 	// Get the sum of each number mulitplie by its position number (beginning with 10)
@@ -44,7 +44,7 @@ function isbnCheckDigit ( isbn ) {
 
 	// X shoudl be returned in place of 10
 	if ( chk === 10 ) { 
-		return 'X';
+		return "X";
 	} else {
 		return chk;
 	}
@@ -56,10 +56,10 @@ function archiveLocalStorage() {
 	localStorage.clear();
 
 	// Get the values from the form and store them
-	$( '.stored' ).each(function () {
+	$( ".stored" ).each(function () {
 		// Only if the form field is non-empty
 		if ( $(this).val() !== "" ) {
-			localStorage[ $(this).attr( 'name' ) ] = $(this).val();
+			localStorage[ $(this).attr( "name" ) ] = $(this).val();
 		}
 	});
 }
@@ -195,16 +195,16 @@ $( "<div style='display: none'> \
 </form></div></div>" ).appendTo( 'body' );
 
 // Inject stylesheets for the special order form into the page
-var link = window.document.createElement( 'link' );
-link.rel = 'stylesheet';
-link.type = 'text/css';
-link.href = 'https://thousandsparrows.com/js/colorbox/colorbox.css';
+var link = window.document.createElement( "link" );
+link.rel = "stylesheet";
+link.type = "text/css";
+link.href = "https://thousandsparrows.com/js/colorbox/colorbox.css";
 document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
 
-var link = window.document.createElement( 'link' );
-link.rel = 'stylesheet';
-link.type = 'text/css';
-link.href = 'https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css';
+var link = window.document.createElement( "link" );
+link.rel = "stylesheet";
+link.type = "text/css";
+link.href = "https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css";
 document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
 
 // The HTML for the special order form button
@@ -222,7 +222,7 @@ $(document).ready(function() {
 	$( "#soFormButton" ).bind( "click",function() {
 		setTimeout(function() {
 			// Need to delay about 400 ms for the form to finish fading in
-			$( '#firstName' ).focus(); }, 400); 
+			$( "#firstName" ).focus(); }, 400); 
 	});
 });
 
@@ -233,10 +233,10 @@ $(document).ready(function() {
 
 // Toggle the shipping fields on click
 $(document).ready(function() {
-	$( '#shipping' ).click(function(e) {      
-		$( '.ship' ).toggleClass( 'no-ship', this.checked );
+	$( "#shipping" ).click(function(e) {      
+		$( ".ship" ).toggleClass( "no-ship", this.checked );
 		$( "[name*='orderInfo[ship']" ).toggleDisabled().val( "" );
-		var $chkb = $( ':checkbox', this )[ 0 ];
+		var $chkb = $( ":checkbox", this )[ 0 ];
 		if( e.target !== $chkb ) $chkb.checked = !$chkb.checked; 
 	});
 });
@@ -252,21 +252,21 @@ $(document).ready(function() {
 
 // Store the form data to local storage when the form is submitted 
 $(document).ready(function() {
-	$( '#soSubmit' ).click(function(e) {
+	$( "#soSubmit" ).click(function(e) {
 		archiveLocalStorage();
 	});
 });
 
 // If the first name is an '=', then retrieve local storage and fill the form
 $(document).ready(function () {
-	$( '#firstName' ).keyup(function () {
+	$( "#firstName" ).keyup(function () {
 		if ( $(this).val() == "=" ) {
 			for ( var i = 0; i < localStorage.length; i++ ) {
 				$( "[name='" + localStorage.key(i) + "']" ).val( localStorage.getItem( localStorage.key( i ) ) );
 			}
 
-			if ( localStorage.getItem( 'orderInfo[shipFirstName]' ) ) {
-				$( '.ship' ).toggleClass( 'no-ship' );
+			if ( localStorage.getItem( "orderInfo[shipFirstName]" ) ) {
+				$( ".ship" ).toggleClass( "no-ship" );
 				$( "[name*='orderInfo[ship']" ).toggleDisabled();
 				$( "#shipCheck" ).prop( "checked", true );
 			}
@@ -288,11 +288,11 @@ $(document).ready(function() {
 
 		// Send the HTTP POST with the form data
 		GM_xmlhttpRequest({
-			method      : 'POST',
-			url         : '/special-order.php',
+			method      : "POST",
+			url         : "/special-order.php",
 			data        : formData,
 			headers     : { "Content-Type": "application/x-www-form-urlencoded" },
-			dataType    : 'json',
+			dataType    : "json",
 			encode      : true,
 			onprogress  : function() { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
 							Sending...</h1>" ); },
@@ -317,7 +317,7 @@ $discountReg = $( '#discountPercentLiteral:contains("43")' ).length > 0 ? true :
 
 // Indicate on the page if the discount is not regular wholesale
 if ( !$discountReg ) {
-	$( 'body' ).addClass( "cantBuy" );
+	$( "body" ).addClass( "cantBuy" );
 }
 
 //////////////////////////
@@ -330,15 +330,15 @@ $(document).ready(function() {
 		e.preventDefault();
 
 		// Process the form data so we can POST it
-		var formData = $.param( $( '#specialOrderForm' ).serializeArray() );
+		var formData = $.param( $( "#specialOrderForm" ).serializeArray() );
 
 		// Send the HTTP POST with the form data
 		GM_xmlhttpRequest({
-			method      : 'POST',
-			url         : 'https://web.haslams/order-for-stock.php',
+			method      : "POST",
+			url         : "https://web.haslams/order-for-stock.php",
 			data        : formData,
 			headers		: { "Content-Type": "application/x-www-form-urlencoded" },
-			dataType    : 'json',
+			dataType    : "json",
 			encode      : true,
 			onprogress	: function() { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
 						   Sending...</h1>" ); },
