@@ -191,6 +191,7 @@ $("<div style='display: none'> \
 <input type='hidden' id='commerceOrder' name='orderInfo[commerceOrder]' value=''> \
 <input type='hidden' id='distributor' name='orderInfo[distributor]' value='bt'> \
 <input class='button' type='submit' id='soSubmit'> \
+<input class='button' type='submit' class='specialOrder' id='stockButton' value='Order for Stock' style='margin-right: 1ex; background: gray; text-shadow: 1px 1px 1px #333;'> \
 </form></div></div>").appendTo('body');
 
 // Inject stylesheets for the special order form into the page
@@ -227,7 +228,7 @@ $(document).ready(function() {
 
 // Show the colorbox for the special order form
 $(document).ready(function() {
-	$(".specialOrder").colorbox({inline:true, width:"85%"});
+	$("#soFormButton").colorbox({inline:true, width:"85%"});
 });
 
 // Toggle the shipping fields on click
@@ -318,3 +319,34 @@ $discountReg = $('#discountPercentLiteral:contains("43")').length > 0 ? true : f
 if (!$discountReg) {
 	$('body').addClass("cantBuy");
 }
+
+//////////////////////////
+//       Testing        //
+//////////////////////////
+
+// AJAX for Order for Stock button
+$(document).ready(function() {
+    $( "#stockButton" ).click(function(e) {
+        e.preventDefault();
+
+        // Process the form data so we can POST it
+        var formData = $.param( $( '#specialOrderForm' ).serializeArray() );
+
+        console.log(formData);
+        // Send the HTTP POST with the form data
+        GM_xmlhttpRequest({
+            method      : 'POST',
+            url         : 'https://web.haslams/order-for-stock.php',
+            data        : formData,
+            headers		: { "Content-Type": "application/x-www-form-urlencoded" },
+            dataType    : 'json',
+            encode      : true,
+            onprogress	: function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+						   Sending...</h1>"); },
+            onload		: function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+						   Success!</h1>");
+                           $.colorbox.close(); },
+            onerror		: function(response) { console.log(response.responseText); }
+        })
+    });
+});
