@@ -214,7 +214,7 @@ $(document).ready(function(){
 $(document).ready(function() {
 	$( "#shipping" ).click(function(e) {      
 		$( ".ship" ).toggleClass( "no-ship", this.checked );
-		$( "[name*='orderInfo[ship']" ).toggleDisabled().val "" );
+		$( "[name*='orderInfo[ship']" ).toggleDisabled().val( "" );
 		var $chkb = $( ":checkbox", this )[ 0 ];
 		if( e.target !== $chkb ) $chkb.checked = !$chkb.checked; 
 	});
