@@ -174,6 +174,7 @@ $("<div style='display: none'> \
 <input type='hidden' id='paOrder' name='orderInfo[paOrder]' value=''> \
 <input type='hidden' id='distributor' name='orderInfo[distributor]' value='ingram'> \
 <input class='button' type='submit' id='soSubmit'> \
+<input class='button' type='submit' class='specialOrder' id='stockButton' value='Order for Stock' style='margin-right: 1ex; background: gray; text-shadow: 1px 1px 1px #333;'> \
 </form></div></div>").appendTo('body');
 
 // Inject stylesheets for the special order form into the page
@@ -197,7 +198,7 @@ $(document).ready(function() {
 
 // The HTML for the special order form button
 if ( $availableUS && $discountReg ) {
-	$(".mastHeadContainer").after( '<div style="margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
+	$(".mastHeadContainer").after( '<div class="soButton" style="margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
 }
 
 //////////////////////////
@@ -206,7 +207,7 @@ if ( $availableUS && $discountReg ) {
 
 // Show the colorbox for the special order form
 $(document).ready(function(){
-	$(".specialOrder").colorbox({inline:true, width:"85%"});
+	$("#soFormButton").colorbox({inline:true, width:"85%"});
 });
 
 // Toggle the shipping fields on click
@@ -248,6 +249,36 @@ $(document).ready(function () {
 				$("#shipCheck").prop( "checked", true );
 			}
 		}
+	});
+});
+
+//////////////////////////
+//     Submit form      //
+//////////////////////////
+
+// AJAX to submit the form data
+$(document).ready(function() {
+	$("#specialOrderForm").submit(function(e) {
+		e.preventDefault();
+
+		// Process the form data so we can POST it
+		var formData = $.param($(this).serializeArray());
+
+		// Send the HTTP POST with the form data
+		GM_xmlhttpRequest({
+			method      : 'POST',
+			url         : '/special-order.php',
+			data        : formData,
+			headers     : { "Content-Type": "application/x-www-form-urlencoded" },
+			dataType    : 'json',
+			encode      : true,
+			onprogress  : function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+                            Sending...</h1>"); },
+			onload      : function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+                            Success!</h1>");
+                            $.colorbox.close(); },
+			onerror     : function(response) { console.log(response.responseText); }
+		})
 	});
 });
 
@@ -326,28 +357,29 @@ $(document).ready(function(){
 //       Testing        //
 //////////////////////////
 
-// AJAX to submit the form data
+// AJAX for Order for Stock button
 $(document).ready(function() {
-	$("#specialOrderForm").submit(function(e) {
-		e.preventDefault();
+    $( "#stockButton" ).click(function(e) {
+        e.preventDefault();
 
-		// Process the form data so we can POST it
-		var formData = $.param($(this).serializeArray());
+        // Process the form data so we can POST it
+        var formData = $.param( $( '#specialOrderForm' ).serializeArray() );
 
-		// Send the HTTP POST with the form data
-		GM_xmlhttpRequest({
-			method      : 'POST',
-			url         : '/special-order.php',
-			data        : formData,
-			headers     : { "Content-Type": "application/x-www-form-urlencoded" },
-			dataType    : 'json',
-			encode      : true,
-			onprogress  : function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-                            Sending...</h1>"); },
-			onload      : function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-                            Success!</h1>");
-                            $.colorbox.close(); },
-			onerror     : function(response) { console.log(response.responseText); }
-		})
-	});
+        console.log(formData);
+        // Send the HTTP POST with the form data
+        GM_xmlhttpRequest({
+            method      : 'POST',
+            url         : 'https://web.haslams/order-for-stock.php',
+            data        : formData,
+            headers		: { "Content-Type": "application/x-www-form-urlencoded" },
+            dataType    : 'json',
+            encode      : true,
+            onprogress	: function() { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+						   Sending...</h1>"); },
+            onload		: function(response) { $("#specialOrder").html("<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+						   Success!</h1>");
+                           $.colorbox.close(); },
+            onerror		: function(response) { console.log(response.responseText); }
+        })
+    });
 });
