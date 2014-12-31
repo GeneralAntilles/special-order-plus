@@ -54,7 +54,7 @@ $pdftk = "/usr/bin/pdftk";
 // Generate a unique filename for each order
 $filename = date( "Y-m-d" ) . "-" . time();
 $xfdfFile = $filename . ".xfdf";
-$result_directory = dirname(__FILE__) . "/" . RESULTS_PATH;
+$resultDirectory = dirname(__FILE__) . "/" . RESULTS_PATH;
 
 // Get the counter index from a file and increment it by one
 $fp = fopen("special-order-index.txt", "c+");
@@ -70,7 +70,7 @@ fclose($fp);
 $orderInfo["orderNumber"] = file_get_contents ( "./special-order-index.txt" );
 
 // This is where our XFDF file ends up
-$xfdfFilePath = $result_directory . "/" . $xfdfFile;
+$xfdfFilePath = $resultDirectory . $xfdfFile;
 
 // PDF file names
 $pdfName = substr( $xfdfFilePath, 0, -4 ) . "pdf";
