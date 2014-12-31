@@ -335,7 +335,7 @@ $(document).ready(function() {
 		// Send the HTTP POST with the form data
 		GM_xmlhttpRequest({
 			method      : "POST",
-			url         : "https://web.haslams/order-for-stock.php",
+			url         : "/order-for-stock.php",
 			data        : formData,
 			headers		: { "Content-Type": "application/x-www-form-urlencoded" },
 			dataType    : "json",
