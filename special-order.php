@@ -110,7 +110,7 @@ if ( file_exists( "./" . RESULTS_PATH . $filename . ".pdf.pre" ) ) {
 }
 
 // Print the final PDF
-system( "/usr/bin/lpr -o landscape -P Brother_HL-5470DW " . RESULTS_PATH . "$pdf_file_name" ); 
+system( "/usr/bin/lpr -o landscape -P " . $orderInfo["printer"] . " " . RESULTS_PATH . "$pdf_file_name" ); 
 
 echo json_encode($orderInfo);
 ?>
