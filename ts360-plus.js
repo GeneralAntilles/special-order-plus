@@ -242,21 +242,24 @@ $(document).ready(function() {
 		// Process the form data so we can POST it
 		var formData = $.param( $(this).serializeArray() );
 
-		// Send the HTTP POST with the form data
-		GM_xmlhttpRequest({
-			method      : "POST",
-			url         : remoteServerUrl + "/special-order.php",
-			data        : formData,
-			headers     : { "Content-Type": "application/x-www-form-urlencoded" },
-			dataType    : "json",
-			encode      : true,
-			onprogress  : function() { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-							Sending...</h1>" ); },
-			onload      : function( response ) { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-							Success!</h1>" );
-							$.colorbox.close(); },
-			onerror     : function( response ) { console.log( response.responseText ); }
-		})
+		// Make sure we want to submit the form
+		if ( ( !confirm( "Submit the special order?" ) ) ) {
+			// Send the HTTP POST with the form data
+			GM_xmlhttpRequest({
+				method      : "POST",
+				url         : remoteServerUrl + "/special-order.php",
+				data        : formData,
+				headers     : { "Content-Type": "application/x-www-form-urlencoded" },
+				dataType    : "json",
+				encode      : true,
+				onprogress  : function() { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+								Sending...</h1>" ); },
+				onload      : function(response) { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
+								Success!</h1>" );
+								$.colorbox.close(); },
+				onerror     : function(response) { console.log( response.responseText ); }
+			})
+		}
 	});
 });
 
