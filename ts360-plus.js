@@ -33,8 +33,8 @@ var remoteServerUrl = "https://example.com/";
 //      Variables       //
 //////////////////////////
 
-// Is the discount percentage regular wholesale?
-var $discountReg;
+// Check to see if the discount is a normal, wholesale discount and set the variable accordingly.
+var $discountReg = $( '#discountPercentLiteral:contains("43")' ).length > 0 ? true : false;
 
 // Is it returnable?
 var $returnable;
@@ -259,13 +259,6 @@ $(document).ready(function() {
 		})
 	});
 });
-
-//////////////////////////
-//   Page indicators    //
-//////////////////////////
-
-// Check to see if the discount is a normal, wholesale discount and set the variable accordingly.
-$discountReg = $( '#discountPercentLiteral:contains("43")' ).length > 0 ? true : false;
 
 //////////////////////////
 //   Apply formatting   //
