@@ -82,7 +82,7 @@ $xfdf = createXFDF( $pdfFileUrl, $orderInfo );
 // Write the XFDF to disk
 if( $fp = fopen( $xfdfFilePath, "w" ) )
 {
-    fwrite( $fp, $xfdf, strlen( $xfdf ) );
+	fwrite( $fp, $xfdf, strlen( $xfdf ) );
 }
 fclose($fp);
 
