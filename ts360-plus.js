@@ -22,6 +22,13 @@
 // ==/UserScript==
 
 //////////////////////////
+//      Settings        //
+//////////////////////////
+
+// Remote web server URL
+var remoteServerUrl = "https://example.com/";
+
+//////////////////////////
 //      Functions       //
 //////////////////////////
 
@@ -289,7 +296,7 @@ $(document).ready(function() {
 		// Send the HTTP POST with the form data
 		GM_xmlhttpRequest({
 			method      : "POST",
-			url         : "/special-order.php",
+			url         : remoteServerUrl + "/special-order.php",
 			data        : formData,
 			headers     : { "Content-Type": "application/x-www-form-urlencoded" },
 			dataType    : "json",
@@ -335,7 +342,7 @@ $(document).ready(function() {
 		// Send the HTTP POST with the form data
 		GM_xmlhttpRequest({
 			method      : "POST",
-			url         : "/order-for-stock.php",
+			url         : remoteServerUrl + "/order-for-stock.php",
 			data        : formData,
 			headers		: { "Content-Type": "application/x-www-form-urlencoded" },
 			dataType    : "json",
