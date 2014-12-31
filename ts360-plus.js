@@ -12,6 +12,7 @@
 // @require     https://thousandsparrows.com/js/jquery.csv-0.71.js
 // @require     https://raw.githubusercontent.com/digitalBush/jquery.maskedinput/1.4.0/dist/jquery.maskedinput.min.js
 // @require     https://gist.github.com/raw/2625891/waitForKeyElements.js
+// @require     https://thousandsparrows.com/js/special-order-plus.js
 // @resource    https://thousandsparrows.com/js/colorbox/colorbox.css
 // @resource    https://thousandsparrows.com/jquery.form.min.js
 // @resource    https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css
@@ -27,58 +28,6 @@
 
 // Remote web server URL
 var remoteServerUrl = "https://example.com/";
-
-//////////////////////////
-//      Functions       //
-//////////////////////////
-
-// Check whether string ends with a supplied suffix
-function endsWith( str, suffix ) {
-	return str.indexOf( suffix, str.length - suffix.length ) !== -1;
-}
-
-// Calculate ISBN-10 check digit
-function isbnCheckDigit ( isbn ) {
-	var isbnArr = isbn.split( "" );
-	var sum = 0;
-
-	// Get the sum of each number mulitplie by its position number (beginning with 10)
-	for( var i = 0, s = 10; i < 9; i++, s-- ) {
-		sum += ( isbnArr[ i ] * ( s ) );
-	}
-
-	var chk = ( 11 - ( sum % 11 ) );
-
-	// X shoudl be returned in place of 10
-	if ( chk === 10 ) { 
-		return "X";
-	} else {
-		return chk;
-	}
-}
-
-// Store the form data to local storage
-function archiveLocalStorage() {
-	// Clear the previously stored values
-	localStorage.clear();
-
-	// Get the values from the form and store them
-	$( ".stored" ).each(function () {
-		// Only if the form field is non-empty
-		if ( $(this).val() !== "" ) {
-			localStorage[ $(this).attr( "name" ) ] = $(this).val();
-		}
-	});
-}
-
-// Toggle the disabled attribute on an HTML element
-(function($) {
-	$.fn.toggleDisabled = function(){
-		return this.each(function(){
-			this.disabled = !this.disabled;
-		});
-	};
-})(jQuery);
 
 //////////////////////////
 //      Variables       //

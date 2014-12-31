@@ -11,6 +11,7 @@
 // @require     https://raw.githubusercontent.com/jackmoore/colorbox/master/jquery.colorbox-min.js
 // @require     https://thousandsparrows.com/js/jquery.csv-0.71.js
 // @require     https://raw.githubusercontent.com/digitalBush/jquery.maskedinput/1.4.0/dist/jquery.maskedinput.min.js
+// @require     https://thousandsparrows.com/js/special-order-plus.js
 // @resource    https://thousandsparrows.com/js/colorbox/colorbox.css
 // @resource    https://thousandsparrows.com/jquery.form.min.js
 // @resource    https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css
@@ -26,48 +27,6 @@
 
 // Remote web server URL
 var remoteServerUrl = "https://example.com/";
-
-//////////////////////////
-//      Functions       //
-//////////////////////////
-
-// Check whether string ends with a supplied suffix
-function endsWith( str, suffix ) {
-	return str.indexOf( suffix, str.length - suffix.length ) !== -1;
-}
-
-// Store the form data to local storage
-function archiveLocalStorage() {
-	// Clear the previously stored values
-	localStorage.clear();
-
-	// Get the values from the form and store them
-	$( ".stored" ).each(function () {
-		// Only if the form field is non-empty
-		if ( $(this).val() !== "" ) {
-			localStorage[ $(this).attr( "name" ) ] = $(this).val();
-		}
-	});
-}
-
-// Focus the first text field on the special order form when the form is activated
-$(document).ready(function() { 
-	// Do this when the special order link is activated
-	$( "#soFormButton" ).bind("click",function() {
-		setTimeout(function() {
-			// Need to delay about 400 ms for the form to finish fading in
-			$( "#firstName" ).focus(); }, 400 ); 
-	});
-});
-
-// Toggle the disabled attribute on an HTML element
-(function($) {
-	$.fn.toggleDisabled = function(){
-		return this.each(function(){
-			this.disabled = !this.disabled;
-		});
-	};
-})(jQuery);
 
 //////////////////////////
 //      Variables       //
@@ -211,6 +170,16 @@ if ( $availableUS && $discountReg ) {
 //////////////////////////
 //       Form js        //
 //////////////////////////
+
+// Focus the first text field on the special order form when the form is activated
+$(document).ready(function() { 
+	// Do this when the special order link is activated
+	$( "#soFormButton" ).bind("click",function() {
+		setTimeout(function() {
+			// Need to delay about 400 ms for the form to finish fading in
+			$( "#firstName" ).focus(); }, 400 ); 
+	});
+});
 
 // Show the colorbox for the special order form
 $(document).ready(function(){
