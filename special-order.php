@@ -108,7 +108,3 @@ system( "/usr/bin/lpr -o landscape -P Brother_HL-5470DW results/$pdf_file_name" 
 
 echo json_encode($orderInfo);
 ?>
-
-<?php //print "<html><body>"; ?>
-<?php //print "<p><a href='/results/$pdf_file_name'>$pdf_file_name</a><h1>Special order printing! Go back to continue. Order #: $orderInfo[orderNumber] </h1><p>$retXfdf $retBarcode $retStamp</p>"; ?>
-<?php //print "</body></html>"; ?>
