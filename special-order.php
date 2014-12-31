@@ -11,6 +11,9 @@ define( "PDF_HOSTNAME", "web.haslams" );
 // Path to our pdftk executable
 define( "PDFTK", "/usr/bin/pdftk" );
 
+// Path to our barcode executable
+define( "BARCODE", "/usr/local/bin/barcode" );
+
 // Where we want to output our files. Needs a trailing slash. 
 define( "RESULTS_PATH", "results/");
 
@@ -48,9 +51,6 @@ if ( empty( $orderInfo["address"] ) ) {
 $pdfFileUrl = "https://" . PDF_HOSTNAME . "/special-order-form-ingram.pdf";
 $pdfTemplatePath = "/special-order-form-ingram.pdf";
 
-// This is the pdftk tool path
-$pdftk = "/usr/bin/pdftk";
-
 // Generate a unique filename for each order
 $filename = date( "Y-m-d" ) . "-" . time();
 $xfdfFile = $filename . ".xfdf";
@@ -87,9 +87,9 @@ if( $fp = fopen( $xfdfFilePath, "w" ) )
 fclose($fp);
 
 // Fill the PDF from the XFDF, generate an EAN13 barcode, stamp the PDF with the barcode
-$xfdfCmd = "$pdftk $pdfTemplatePath fill_form $xfdfFilePath output $pdfName.pre flatten";
-$barcodeCmd = "/usr/local/bin/barcode -e ean13 -n -b \"$orderInfo[ean13]\" -D -o " . RESULTS_PATH . "$filename-13.txt -g100x30+160+135";
-$stampCmd = "$pdftk $pdfName.pre stamp " . RESULTS_PATH . "$filename-13.pdf output $pdfName";
+$xfdfCmd = PDFTK . " $pdfTemplatePath fill_form $xfdfFilePath output $pdfName.pre flatten";
+$barcodeCmd = BARCODE . " -e ean13 -n -b \"$orderInfo[ean13]\" -D -o " . RESULTS_PATH . "$filename-13.txt -g100x30+160+135";
+$stampCmd = PDFTK . " $pdfName.pre stamp " . RESULTS_PATH . "$filename-13.pdf output $pdfName";
 
 exec( $xfdfCmd, $outputXfdf, $retXfdf );
 exec( $barcodeCmd, $outputBarcode, $retBarcode );
