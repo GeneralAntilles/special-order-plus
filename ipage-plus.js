@@ -18,7 +18,6 @@
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @grant       GM_xmlhttpRequest
-// @grant       unsafeWindow
 // ==/UserScript==
 
 //////////////////////////
