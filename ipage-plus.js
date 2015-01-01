@@ -65,6 +65,21 @@ $(document).ready(function() {
 	$( "#binding" ).val( $orderInfo[ binding ] );
 });
 
+// Get the BISAC categories from the page
+var $bisacCategories = $.trim( $( ".productDetailSmallElements:contains('BISAC')" ).text().replace( /BISAC.*\s*/, "" ).replace( /\s*\|\s*/g, "\n" ) );
+
+// Get the LC subject categories from the page
+var $lcSubjects = $.trim( $( "strong:contains('LC Subjects:')" ).next().next().text() ).replace( /\s*-/g, "\n" ).substr( 1 );
+
+// Get the physical attributes from the page
+var $physical = $.trim( $( '.productDetailSmallElements:contains("Physical")' ).text().replace( /Physical Info: /, "" ) );
+
+// Get the carton quantity from the page
+var $cartonQuantity = $.trim( $( '.productDetailSmallElements:contains("Carton")' ).text().replace( /Carton Quantity: /, "" ) );
+
+// Get the long description from the page
+var $longDescription = $.trim( $( "#reviewsBox" ).text() );
+
 // Get the availability info from the page
 var $tnAvail = $( ".scLightRow" ).first().text();
 var $tnOrder = $( ".scLightRow" ).eq(1).text();
