@@ -145,7 +145,7 @@ $( "<div style='display: none'> \
 // Insert the hidden form fields
 for ( var i = 0; i < Object.size( $orderInfo ); i++ ) {
 	var orderInfoIndex = Object.keys( $orderInfo );
-	$( "#soForm" ).append( "<input type='hidden' id='" + orderInfoIndex[ i ] + "' name='orderInfo[" + orderInfoIndex[ i ] + "]' value=''>" );
+	$( "#hiddenInfo" ).append( "<input type='hidden' id='" + orderInfoIndex[ i ] + "' name='orderInfo[" + orderInfoIndex[ i ] + "]' value=''>" );
 }
 
 // Inject stylesheets for the special order form into the page
