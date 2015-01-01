@@ -32,6 +32,10 @@ var remoteServerUrl = "https://example.com/";
 //      Variables       //
 //////////////////////////
 
+// Index for the CSV we're getting from Ingram
+var $csvIndex = [ "isbn", "ean13", "title", "author", "middleInitial", "publisher", "date", "price" ];
+var $orderInfo = {};
+
 // Check to see if the discount is a normal, wholesale discount and set the variable.
 var $discountReg = $( 'div:contains("REG")' ).length > 0 || $( 'div:contains("45%")' ).length > 0 ? true : false;
 
@@ -42,49 +46,42 @@ var $availableUS = $( 'p:contains("Available in some countries but not the Unite
 var $returnable = $( 'p:contains("This item is Not Returnable")' ).length > 0 ? false : true;
 
 // Grab the ISBN from the table
-var $isbn = $( ".productDetailElements" ).first().contents().filter(function() {
+var $orderInfo.isbn = $( ".productDetailElements" ).first().contents().filter(function() {
 	return this.nodeType == 3;
 }).text().substring( 1,11 );
 
 // Grab Ingram's ttlid for the entry from the HTML
-var $ttlid = $( "[name='ttlid']" ).attr( "value" );
+var $orderInfo.ttlid = $( "[name='ttlid']" ).attr( "value" );
 
 // Get the binding information
-var binding = $.trim( $( ".productDetailElements:contains('Binding')" ).contents().filter(function() {
+var $orderInfo.binding = $.trim( $( ".productDetailElements:contains('Binding')" ).contents().filter(function() {
 	return this.nodeType == 3;
 }).text());
-
-// Index for the CSV we're getting from Ingram
-var $orderInfoIndex = [ "isbn", "ean13", "title", "author", "middleInitial", "publisher", "date", "price" ];
-var $orderInfo = {};
-
-// We have to scrape the binding
-$orderInfo[ binding ] = binding;
 
 $(document).ready(function() {
 	$( "#binding" ).val( $orderInfo[ binding ] );
 });
 
 // Get the BISAC categories from the page
-var $bisacCategories = $.trim( $( ".productDetailSmallElements:contains('BISAC')" ).text().replace( /BISAC.*\s*/, "" ).replace( /\s*\|\s*/g, "\n" ) );
+var $orderInfo.bisacCategories = $.trim( $( ".productDetailSmallElements:contains('BISAC')" ).text().replace( /BISAC.*\s*/, "" ).replace( /\s*\|\s*/g, "\n" ) );
 
 // Get the LC subject categories from the page
-var $lcSubjects = $.trim( $( "strong:contains('LC Subjects:')" ).next().next().text() ).replace( /\s*-/g, "\n" ).substr( 1 );
+var $orderInfo.lcSubjects = $.trim( $( "strong:contains('LC Subjects:')" ).next().next().text() ).replace( /\s*-/g, "\n" ).substr( 1 );
 
 // Get the physical attributes from the page
-var $physical = $.trim( $( '.productDetailSmallElements:contains("Physical")' ).text().replace( /Physical Info: /, "" ) );
+var $orderInfo.physical = $.trim( $( '.productDetailSmallElements:contains("Physical")' ).text().replace( /Physical Info: /, "" ) );
 
 // Get the carton quantity from the page
-var $cartonQuantity = $.trim( $( '.productDetailSmallElements:contains("Carton")' ).text().replace( /Carton Quantity: /, "" ) );
+var $orderInfo.cartonQuantity = $.trim( $( '.productDetailSmallElements:contains("Carton")' ).text().replace( /Carton Quantity: /, "" ) );
 
 // Get the long description from the page
-var $longDescription = $.trim( $( "#reviewsBox" ).text() );
+var $orderInfo.longDescription = $.trim( $( "#reviewsBox" ).text() );
 
 // Get the availability info from the page
-var $tnAvail = $( ".scLightRow" ).first().text();
-var $tnOrder = $( ".scLightRow" ).eq(1).text();
-var $paAvail = $( ".scDarkRow" ).first().text();
-var $paOrder = $( ".scDarkRow" ).eq(1).text();
+var $orderInfo.tnAvail = $( ".scLightRow" ).first().text();
+var $orderInfo.tnOrder = $( ".scLightRow" ).eq(1).text();
+var $orderInfo.paAvail = $( ".scDarkRow" ).first().text();
+var $orderInfo.paOrder = $( ".scDarkRow" ).eq(1).text();
 
 $(document).ready(function() {
 	$( "#tnAvail" ).val( $tnAvail );
@@ -139,24 +136,18 @@ $( "<div style='display: none'> \
 <label><span>Clerk: </span><input type='text' name='orderInfo[clerk]' class='stored' required><br></label> \
 <label><span>Ticket #: </span><input type='text' name='orderInfo[ticketNum]' class='stored'><br></label> \
 </div> \
-<input type='hidden' id='ttlid' name='orderInfo[ttlid]' value=''> \
-<input type='hidden' id='isbn' name='orderInfo[isbn]' value=''> \
-<input type='hidden' id='ean13' name='orderInfo[ean13]' value=''> \
-<input type='hidden' id='title' name='orderInfo[title]' value=''> \
-<input type='hidden' id='author' name='orderInfo[author]' value=''> \
-<input type='hidden' id='middleInitial' name='orderInfo[middleInitial]' value=''> \
-<input type='hidden' id='publisher' name='orderInfo[publisher]' value=''> \
-<input type='hidden' id='date' name='orderInfo[date]' value=''> \
-<input type='hidden' id='price' name='orderInfo[price]' value=''> \
-<input type='hidden' id='binding' name='orderInfo[binding]' value=''> \
-<input type='hidden' id='tnAvail' name='orderInfo[tnAvail]' value=''> \
-<input type='hidden' id='tnOrder' name='orderInfo[tnOrder]' value=''> \
-<input type='hidden' id='paAvail' name='orderInfo[paAvail]' value=''> \
-<input type='hidden' id='paOrder' name='orderInfo[paOrder]' value=''> \
+<div id='hiddenInfo'> \
 <input type='hidden' id='distributor' name='orderInfo[distributor]' value='ingram'> \
+</div> \
 <input class='button' type='submit' id='soSubmit'> \
 <input class='button' type='submit' class='specialOrder' id='stockButton' value='Order for Stock' style='margin-right: 1ex; background: gray; text-shadow: 1px 1px 1px #333;'> \
 </form></div></div>" ).appendTo( 'body' );
+
+// Insert the hidden form fields
+for ( var i = 0; i < Object.size( $orderInfo ); i++ ) {
+	var orderInfoIndex = Object.keys( $orderInfo );
+	$( "#soForm" ).append( "<input type='hidden' id='" + orderInfoIndex[ i ] + "' name='orderInfo[" + orderInfoIndex[ i ] + "]' value=''>" );
+}
 
 // Inject stylesheets for the special order form into the page
 var link = window.document.createElement( "link" );
@@ -173,7 +164,7 @@ document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
 
 // Add a link to this entry on Baker & Taylor
 $(document).ready(function() {
-	var btUrl = "http://ts360.baker-taylor.com/pages/searchresults.aspx?keyword=" + $isbn;
+	var btUrl = "http://ts360.baker-taylor.com/pages/searchresults.aspx?keyword=" + $orderInfo.isbn;
 	$( "<a href='" + btUrl + "' accesskey='b' target='_blank'>Check on B&T</a>" ).appendTo( "body" );
 });
 
@@ -313,7 +304,7 @@ $(document).ready(function(){
 		method      : "post",
 		contentType : "application/x-www-form-urlencoded",
 		// This it the POST string for the CSV, ttlid is scraped then inserted here
-		data        : "select6=ASCD&ttlid=" + $ttlid + "&download.x=40&download.y=9&download=Download" ,
+		data        : "select6=ASCD&ttlid=" + $orderInfo.ttlid + "&download.x=40&download.y=9&download=Download" ,
 		success     : function( data, textStatus, jQxhr ){
 			// Feed the CSV into an array
 			var $ttlidCSV = $.csv.toArray( data );
@@ -323,8 +314,8 @@ $(document).ready(function(){
 
 			// Feed the array into an associative array
 			for ( var i = 0; i < 8; i++ ) {
-				$orderInfo[ $orderInfoIndex[ i ] ] = $ttlidCSV[ i ]; 
-				$( "#" + $orderInfoIndex[ i ] ).val( $orderInfo[ $orderInfoIndex[ i ] ] );
+				$orderInfo[ $csvIndex[ i ] ] = $ttlidCSV[ i ]; 
+				$( "#" + $csvIndex[ i ] ).val( $orderInfo[ $csvIndex[ i ] ] );
 			}
 		},
 		error       : function( jqXhr, textStatus, errorThrown ){
