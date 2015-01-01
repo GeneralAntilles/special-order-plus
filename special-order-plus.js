@@ -16,6 +16,21 @@ function endsWith( str, suffix ) {
 }
 
 /**
+ * Get the length of an object
+ * @param  {object} obj Object to be sized
+ * @return {int}        Length of the object
+ */
+Object.size = function( obj ) {
+	var size = 0, key;
+
+	for ( key in obj ) {
+		if ( obj.hasOwnProperty( key ) ) size++;
+	}
+
+	return size;
+};
+
+/**
  * Calculate ISBN-10 check digit
  * @param  {string} 9 digits of ISBN-10 to be checkedsumed
  * @return {string} ISBN-10 check digit (X if 10)
