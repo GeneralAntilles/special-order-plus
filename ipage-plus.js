@@ -33,13 +33,13 @@ var remoteServerUrl = "https://example.com/";
 //////////////////////////
 
 // Check to see if the discount is a normal, wholesale discount and set the variable.
-$discountReg = $( 'div:contains("REG")' ).length > 0 || $( 'div:contains("45%")' ).length > 0 ? true : false;
+var $discountReg = $( 'div:contains("REG")' ).length > 0 || $( 'div:contains("45%")' ).length > 0 ? true : false;
 
 // Check to see if it's available
-$availableUS = $( 'p:contains("Available in some countries but not the United States.")' ).length > 0 || $( 'p:contains("Restricted:  Not available to all customers.")' ).length > 0 ? false : true;
+var $availableUS = $( 'p:contains("Available in some countries but not the United States.")' ).length > 0 || $( 'p:contains("Restricted:  Not available to all customers.")' ).length > 0 ? false : true;
 
 // Check to see if it's returnable
-$returnable = $( 'p:contains("This item is Not Returnable")' ).length > 0 ? false : true;
+var $returnable = $( 'p:contains("This item is Not Returnable")' ).length > 0 ? false : true;
 
 // Grab the ISBN from the table
 var $isbn = $( ".productDetailElements" ).first().contents().filter(function() {
