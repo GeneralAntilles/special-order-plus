@@ -93,10 +93,10 @@ $( "#ipageLogo" ).css( "display", "none" );
 //////////////////////////
 
 // Append various styles for the scripts
-$( "<div style='display: none'> \
-<div id='specialOrder' style='display: block; background-color: white; padding: 1em;'> \
+$( "<div class='colorboxDiv'> \
+<div id='specialOrder'> \
 <form action='' method='post' class='special-order-form' id='specialOrderForm'> \
-<div class='formLeft' style='float: left;width: 50%'> \
+<div class='formLeft'> \
 <label><span>First name: </span><input type='text' name='orderInfo[firstName]' id='firstName' class='stored' required><br></label> \
 <label><span>Last name: </span><input type='text' name='orderInfo[lastName]' class='stored'><br></label> \
 <label><span>Telephone: </span><input type='tel' name='orderInfo[telephone]' class='stored'><br></label> \
@@ -111,7 +111,7 @@ $( "<div style='display: none'> \
 <input type='hidden' value='Off' name='orderInfo[stock]'> \
 <label class='checkbox'><input type='checkbox' name='orderInfo[stock]' accesskey='i' value='Stock'>Stock<br></label> \
 </div> \
-<div class='formRight' style='float: right; width: 50%;'> \
+<div class='formRight'> \
 <input type='hidden' value='NoShip' name='orderInfo[ship]'> \
 <h1 id='shipping' class='ship no-ship' accesskey='u'>Shipping<input type='checkbox' value='Ship' name='orderInfo[ship]' style='display: none;' id='ship'></h1> \
 <label class='ship no-ship'><span>First name: </span><input type='text' name='orderInfo[shipFirstName]' class='stored' disabled='disabled'><br></label> \
@@ -128,7 +128,7 @@ $( "<div style='display: none'> \
 <input type='hidden' id='distributor' name='orderInfo[distributor]' value='ingram'> \
 </div> \
 <input class='button' type='submit' id='soSubmit'> \
-<input class='button' type='submit' class='specialOrder' id='stockButton' value='Order for Stock' style='margin-right: 1ex; background: gray; text-shadow: 1px 1px 1px #333;'> \
+<input class='button' type='submit' class='specialOrder' id='stockButton' value='Order for Stock'> \
 </form></div></div>" ).appendTo( 'body' );
 
 // Insert the hidden form fields
@@ -164,7 +164,7 @@ $(document).ready(function() {
 
 // The HTML for the special order form button
 if ( $availableUS && $discountReg ) {
-	$( ".mastHeadContainer" ).after( '<div class="soButton" style="margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
+	$( ".mastHeadContainer" ).after( '<div class="soButton"><p><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
 }
 
 //////////////////////////
@@ -250,10 +250,10 @@ $(document).ready(function() {
 				headers     : { "Content-Type": "application/x-www-form-urlencoded" },
 				dataType    : "json",
 				encode      : true,
-				onprogress  : function() { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-								Sending...</h1>" ); },
-				onload      : function(response) { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-								Success!</h1>" );
+				onprogress  : function() { $( "#specialOrder" )
+								.html( "<h1 class='ajaxStatus'>Sending...</h1>" ); },
+				onload      : function(response) { $( "#specialOrder" )
+								.html( "<h1 class='ajaxStatus'>Success!</h1>" );
 								$.colorbox.close(); },
 				onerror     : function(response) { console.log( response.responseText ); }
 			})
@@ -300,22 +300,22 @@ $(document).ready(function(){
 		// This it the POST string for the CSV, ttlid is scraped then inserted here
 		data        : "select6=ASCD&ttlid=" + $orderInfo.ttlid + "&download.x=40&download.y=9&download=Download" ,
 		success     : function( data, textStatus, jQxhr ){
-			// Feed the CSV into an array
-			var $ttlidCSV = $.csv.toArray( data );
+						// Feed the CSV into an array
+						var $ttlidCSV = $.csv.toArray( data );
 
-			// Add a dollar sign to the price
-			$ttlidCSV[ 7 ] =  "$" + $.trim( $ttlidCSV[ 7 ] );
+						// Add a dollar sign to the price
+						$ttlidCSV[ 7 ] =  "$" + $.trim( $ttlidCSV[ 7 ] );
 
-			// Feed the array into an associative array
-			for ( var i = 0; i < 8; i++ ) {
-				$orderInfo[ $csvIndex[ i ] ] = $ttlidCSV[ i ]; 
-				$( "#" + $csvIndex[ i ] ).val( $orderInfo[ $csvIndex[ i ] ] );
-			}
-		},
+						// Feed the array into an associative array
+						for ( var i = 0; i < 8; i++ ) {
+							$orderInfo[ $csvIndex[ i ] ] = $ttlidCSV[ i ]; 
+							$( "#" + $csvIndex[ i ] ).val( $orderInfo[ $csvIndex[ i ] ] );
+						}
+					  },
 		error       : function( jqXhr, textStatus, errorThrown ){
-			console.log( "CSV request error" );
-			console.log( errorThrown );
-		}
+						console.log( "CSV request error" );
+						console.log( errorThrown );
+					  }
 	});
 });
 
@@ -339,11 +339,11 @@ $(document).ready(function() {
 			headers		: { "Content-Type": "application/x-www-form-urlencoded" },
 			dataType    : "json",
 			encode      : true,
-			onprogress	: function() { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-						   Sending...</h1>" ); },
-			onload		: function( response ) { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-						   Success!</h1>" );
-						   $.colorbox.close(); },
+			onprogress	: function() { $( "#specialOrder" )
+						    .html( "<h1 class='ajaxStatus'>Sending...</h1>" ); },
+			onload		: function( response ) { $( "#specialOrder" )
+						    .html( "<h1 class='ajaxStatus'>Success!</h1>" );
+						    $.colorbox.close(); },
 			onerror		: function( response ) { console.log( response.responseText ); }
 		})
 	});
