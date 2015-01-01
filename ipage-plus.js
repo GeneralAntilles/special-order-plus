@@ -68,7 +68,7 @@ var $orderInfo.bisacCategories = $.trim( $( ".productDetailSmallElements:contain
 var $orderInfo.lcSubjects = $.trim( $( "strong:contains('LC Subjects:')" ).next().next().text() ).replace( /\s*-/g, "\n" ).substr( 1 );
 
 // Get the physical attributes from the page
-var $orderInfo.physical = $.trim( $( '.productDetailSmallElements:contains("Physical")' ).text().replace( /Physical Info: /, "" ) );
+var $orderInfo.physical = $.trim( $( '.productDetailSmallElements:contains("Physical Info")' ).text().replace( /Physical Info: /, "" ) );
 
 // Get the carton quantity from the page
 var $orderInfo.cartonQuantity = $.trim( $( '.productDetailSmallElements:contains("Carton")' ).text().replace( /Carton Quantity: /, "" ) );
