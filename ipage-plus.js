@@ -57,10 +57,6 @@ var $orderInfo.binding = $.trim( $( ".productDetailElements:contains('Binding')"
 	return this.nodeType == 3;
 }).text());
 
-$(document).ready(function() {
-	$( "#binding" ).val( $orderInfo[ binding ] );
-});
-
 // Get the BISAC categories from the page
 var $orderInfo.bisacCategories = $.trim( $( ".productDetailSmallElements:contains('BISAC')" ).text().replace( /BISAC.*\s*/, "" ).replace( /\s*\|\s*/g, ", " ) );
 
@@ -81,13 +77,6 @@ var $orderInfo.tnAvail = $( ".scLightRow" ).first().text();
 var $orderInfo.tnOrder = $( ".scLightRow" ).eq(1).text();
 var $orderInfo.paAvail = $( ".scDarkRow" ).first().text();
 var $orderInfo.paOrder = $( ".scDarkRow" ).eq(1).text();
-
-$(document).ready(function() {
-	$( "#tnAvail" ).val( $tnAvail );
-	$( "#tnOrder" ).val( $tnOrder );
-	$( "#paAvail" ).val( $paAvail );
-	$( "#paOrder" ).val( $paOrder );
-});
 
 //////////////////////////
 //      Formatting      //
@@ -146,6 +135,12 @@ $( "<div style='display: none'> \
 for ( var i = 0; i < Object.size( $orderInfo ); i++ ) {
 	var orderInfoIndex = Object.keys( $orderInfo );
 	$( "#hiddenInfo" ).append( "<input type='hidden' id='" + orderInfoIndex[ i ] + "' name='orderInfo[" + orderInfoIndex[ i ] + "]' value=''>" );
+}
+
+// Fill the values of the hidden form fields
+for ( var i = 0; i < Object.size( $orderInfo ); i++ ) {
+	var orderInfoIndex = Object.keys( $orderInfo );
+    $( "#" + orderInfoIndex[ i ] ).val( $orderInfo[ orderInfoIndex[ i ] ] );
 }
 
 // Inject stylesheets for the special order form into the page
