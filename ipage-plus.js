@@ -62,10 +62,10 @@ $(document).ready(function() {
 });
 
 // Get the BISAC categories from the page
-var $orderInfo.bisacCategories = $.trim( $( ".productDetailSmallElements:contains('BISAC')" ).text().replace( /BISAC.*\s*/, "" ).replace( /\s*\|\s*/g, "\n" ) );
+var $orderInfo.bisacCategories = $.trim( $( ".productDetailSmallElements:contains('BISAC')" ).text().replace( /BISAC.*\s*/, "" ).replace( /\s*\|\s*/g, ", " ) );
 
 // Get the LC subject categories from the page
-var $orderInfo.lcSubjects = $.trim( $( "strong:contains('LC Subjects:')" ).next().next().text() ).replace( /\s*-/g, "\n" ).substr( 1 );
+var $orderInfo.lcSubjects = $.trim( $( "strong:contains('LC Subjects:')" ).next().next().text() ).replace( /\s*-/g, ", " ).substr( 1 );
 
 // Get the physical attributes from the page
 var $orderInfo.physical = $.trim( $( '.productDetailSmallElements:contains("Physical Info")' ).text().replace( /Physical Info: /, "" ) );
