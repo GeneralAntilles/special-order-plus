@@ -4,17 +4,16 @@
 // @version     0.5
 // @description Ingram ipage usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
-// @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
+// @downloadURL https://web.haslams/js/ipage-plus.js
 // @include     http*://ipage.ingramcontent.com/ipage/servlet/ibg.common.titledetail.*
 // @run-at      document-end
-// @require     https://code.jquery.com/jquery-latest.js
-// @require     https://raw.githubusercontent.com/jackmoore/colorbox/master/jquery.colorbox-min.js
-// @require     https://thousandsparrows.com/js/jquery.csv-0.71.js
-// @require     https://raw.githubusercontent.com/digitalBush/jquery.maskedinput/1.4.0/dist/jquery.maskedinput.min.js
-// @require     https://thousandsparrows.com/js/special-order-plus.js
-// @resource    https://thousandsparrows.com/js/colorbox/colorbox.css
-// @resource    https://thousandsparrows.com/jquery.form.min.js
-// @resource    https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css
+// @require     https://web.haslams/js/jquery.min.js
+// @require     https://web.haslams/js/jquery.colorbox-min.js
+// @require     https://web.haslams/js/jquery.csv-0.71.js
+// @require     https://web.haslams/js/jquery.maskedinput.min.js
+// @require     https://web.haslams/js/special-order-plus.js
+// @resource    https://web.haslams/css/colorbox.css
+// @resource    https://web.haslams/css/form.css
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @grant       GM_xmlhttpRequest
@@ -25,7 +24,7 @@
 //////////////////////////
 
 // Remote web server URL
-var remoteServerUrl = "https://example.com/";
+var remoteServerUrl = "https://web.haslams/";
 
 //////////////////////////
 //      Variables       //
@@ -95,7 +94,7 @@ $( "#ipageLogo" ).css( "display", "none" );
 // Append various styles for the scripts
 $( "<div class='colorboxDiv'> \
 <div id='specialOrder'> \
-<form action='' method='post' class='special-order-form' id='specialOrderForm'> \
+<form action='" + remoteServerUrl + "/special-order.php' method='post' class='special-order-form' id='specialOrderForm'> \
 <div class='formLeft'> \
 <label><span>First name: </span><input type='text' name='orderInfo[firstName]' id='firstName' class='stored' required><br></label> \
 <label><span>Last name: </span><input type='text' name='orderInfo[lastName]' class='stored'><br></label> \
@@ -151,13 +150,13 @@ for ( var i = 0; i < Object.size( $orderInfo ); i++ ) {
 var link = window.document.createElement( "link" );
 link.rel = "stylesheet";
 link.type = "text/css";
-link.href = "https://thousandsparrows.com/js/colorbox/colorbox.css";
+link.href = "https://web.haslams/css/colorbox.css";
 document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
 
 var link = window.document.createElement( "link" );
 link.rel = "stylesheet";
 link.type = "text/css";
-link.href = "https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css";
+link.href = "https://web.haslams/css/form.css";
 document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
 
 // Add a link to this entry on Baker & Taylor
