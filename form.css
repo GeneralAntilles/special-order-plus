@@ -235,7 +235,7 @@ label.checkbox {
 	margin: 0 0 1em 1em;
 }
 
-.stockButton {
+#stockButton {
 	margin-right: 1ex;
 	background: gray;
 	text-shadow: 1px 1px 1px #333;
