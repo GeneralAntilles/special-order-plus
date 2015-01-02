@@ -104,7 +104,7 @@ $(window).load(function () {
 $( "<div class='colorboxDiv'> \
 <div id='specialOrder'> \
 <form action='" + remoteServerUrl + "/special-order.php' method='post' class='special-order-form' id='specialOrderForm'> \
-<div class='formLeft' \
+<div class='formLeft'> \
 <label><span>First name: </span><input type='text' name='orderInfo[firstName]' id='firstName' class='stored' required><br></label> \
 <label><span>Last name: </span><input type='text' name='orderInfo[lastName]' class='stored'><br></label> \
 <label><span>Telephone: </span><input type='tel' name='orderInfo[telephone]' class='stored'><br></label> \
