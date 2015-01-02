@@ -110,7 +110,7 @@ $( "<div class='colorboxDiv'> \
 <label class='checkbox'><input type='checkbox' name='orderInfo[paid]' accesskey='p' value='Paid'>Paid<br></label> \
 <input type='hidden' value='Off' name='orderInfo[stock]'> \
 <label class='checkbox'><input type='checkbox' name='orderInfo[stock]' accesskey='i' value='Stock'>Stock<br></label> \
-<label><span>Printer: </span><select style='font-size: 1.2em;' name='orderInfo[printer]'> \
+<label><span>Printer: </span><select name='orderInfo[printer]'> \
   <option value='Brother_HL-5470DW'>Front desk - Brother HL-5470DW</option> \
   <option value='Brother_HL-2270DW'>Warehouse - Brother HL-2270DW</option> \
 </select></label> \
