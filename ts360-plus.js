@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        ts360+
 // @namespace   http://www.haslams.com/
-// @version     0.5.6
+// @version     0.6
 // @description Baker & Taylor usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
 // @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
