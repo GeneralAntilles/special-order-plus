@@ -103,7 +103,7 @@ $(window).load(function () {
 // Append various styles for the scripts
 $( "<div class='colorboxDiv'> \
 <div id='specialOrder'> \
-<form action='' method='post' class='special-order-form' id='specialOrderForm'> \
+<form action='" + remoteServerUrl + "/special-order.php' method='post' class='special-order-form' id='specialOrderForm'> \
 <div class='formLeft' \
 <label><span>First name: </span><input type='text' name='orderInfo[firstName]' id='firstName' class='stored' required><br></label> \
 <label><span>Last name: </span><input type='text' name='orderInfo[lastName]' class='stored'><br></label> \
