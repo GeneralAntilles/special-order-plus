@@ -1,19 +1,17 @@
-# Special Order Plus
+*Updated January 1st, 2015*
 
-*Updated December 28th, 2014*
-
-## Purpose
+# Purpose
 
 Special Order Plus faciliates taking special orders through the [Ingram ipage](https://ipage.ingramcontent.com/) and [Baker & Taylor Title Source 360](https://ts360.baker-taylor.com/) web databases by providing a HTML form on these websites and a printing backend.
 
-## Requirements
+# Requirements
 
 1. Web server capable of running PHP.
 2. A userscript plugin like [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) or [Greasemonkey](http://www.greasespot.net/) (not tested in Firefox, though).
 3. The [pdftk](https://www.pdflabs.com/tools/pdftk-server/) tool for filling the PDF forms and stamping barcodes.
 4. [GNU barcode](https://www.pdflabs.com/tools/gnu-barcode-plus-pdf/) patched with PDF support.
 
-## Installation
+# Installation
 
 It's not quite ready for prime-time, but eager testers will need to ensure that all of the requirements are met then:
 
@@ -25,14 +23,14 @@ It's not quite ready for prime-time, but eager testers will need to ensure that 
 
 It's at the bailing wire and good intentions stage of development right now, so there will probably be a lot of hitting.
 
-## Architecture
+# Architecture
 
 The special order system is made up of two parts:
 
 1. A local **userscript**, which does the information scraping and inserts the special order form into the websites.
 2. A remote **web server**, which collects the form data from clients, compiles it into a PDF, prints the PDF, and keeps track of an index number.
 
-### Userscript
+## Userscript
 
 The local userscript is a short JavaScript program which primarily:
 
@@ -46,7 +44,7 @@ Information about the current title is both **scraped from the page** using jQue
 
 The form data, which contains both the collected personal information from the HTML form and title information scraped from the page, is **submitted to the web server** using AJAX.
 
-### Web server
+## Web server
 
 The remote web server is a short PHP program which primarily:
 
@@ -60,7 +58,7 @@ An index number is generated for the special order, then **a PDF form is filled 
 
 The **PDF is printed** to a network printer using CUPS.
 
-### Program flow
+## Program flow
 
 When a client with the appropriate userscripts installed visits a title listing on either Ingram ipage or Baker & Taylor TS360, a special order form button is displayed.
 

@@ -12,6 +12,7 @@
 // @require     https://thousandsparrows.com/js/jquery.csv-0.71.js
 // @require     https://raw.githubusercontent.com/digitalBush/jquery.maskedinput/1.4.0/dist/jquery.maskedinput.min.js
 // @require     https://gist.github.com/raw/2625891/waitForKeyElements.js
+// @require     https://thousandsparrows.com/js/special-order-plus.js
 // @resource    https://thousandsparrows.com/js/colorbox/colorbox.css
 // @resource    https://thousandsparrows.com/jquery.form.min.js
 // @resource    https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css
@@ -22,63 +23,18 @@
 // ==/UserScript==
 
 //////////////////////////
-//      Functions       //
+//      Settings        //
 //////////////////////////
 
-// Check whether string ends with a supplied suffix
-function endsWith( str, suffix ) {
-	return str.indexOf( suffix, str.length - suffix.length ) !== -1;
-}
-
-// Calculate ISBN-10 check digit
-function isbnCheckDigit ( isbn ) {
-	var isbnArr = isbn.split( "" );
-	var sum = 0;
-
-	// Get the sum of each number mulitplie by its position number (beginning with 10)
-	for( var i = 0, s = 10; i < 9; i++, s-- ) {
-		sum += ( isbnArr[ i ] * ( s ) );
-	}
-
-	var chk = ( 11 - ( sum % 11 ) );
-
-	// X shoudl be returned in place of 10
-	if ( chk === 10 ) { 
-		return "X";
-	} else {
-		return chk;
-	}
-}
-
-// Store the form data to local storage
-function archiveLocalStorage() {
-	// Clear the previously stored values
-	localStorage.clear();
-
-	// Get the values from the form and store them
-	$( ".stored" ).each(function () {
-		// Only if the form field is non-empty
-		if ( $(this).val() !== "" ) {
-			localStorage[ $(this).attr( "name" ) ] = $(this).val();
-		}
-	});
-}
-
-// Toggle the disabled attribute on an HTML element
-(function($) {
-	$.fn.toggleDisabled = function(){
-		return this.each(function(){
-			this.disabled = !this.disabled;
-		});
-	};
-})(jQuery);
+// Remote web server URL
+var remoteServerUrl = "https://example.com/";
 
 //////////////////////////
 //      Variables       //
 //////////////////////////
 
-// Is the discount percentage regular wholesale?
-var $discountReg;
+// Check to see if the discount is a normal, wholesale discount and set the variable accordingly.
+var $discountReg = $( '#discountPercentLiteral:contains("43")' ).length > 0 ? true : false;
 
 // Is it returnable?
 var $returnable;
@@ -145,10 +101,10 @@ $(window).load(function () {
 //////////////////////////
 
 // Append various styles for the scripts
-$( "<div style='display: none'> \
-<div id='specialOrder' style='display: block; background-color: white; padding: 1em;'> \
+$( "<div class='colorboxDiv'> \
+<div id='specialOrder'> \
 <form action='' method='post' class='special-order-form' id='specialOrderForm'> \
-<div class='formLeft' style='float: left;width: 50%'> \
+<div class='formLeft' \
 <label><span>First name: </span><input type='text' name='orderInfo[firstName]' id='firstName' class='stored' required><br></label> \
 <label><span>Last name: </span><input type='text' name='orderInfo[lastName]' class='stored'><br></label> \
 <label><span>Telephone: </span><input type='tel' name='orderInfo[telephone]' class='stored'><br></label> \
@@ -163,7 +119,7 @@ $( "<div style='display: none'> \
 <input type='hidden' value='Off' name='orderInfo[stock]'> \
 <label class='checkbox'><input type='checkbox' name='orderInfo[stock]' accesskey='i' value='Stock'>Stock<br></label> \
 </div> \
-<div class='formRight' style='float: right; width: 50%;'> \
+<div class='formRight'> \
 <input type='hidden' value='NoShip' name='orderInfo[ship]'> \
 <h1 id='shipping' class='ship no-ship' accesskey='u'>Shipping<input type='checkbox' value='Ship' name='orderInfo[ship]' style='display: none;' id='ship'></h1> \
 <label class='ship no-ship'><span>First name: </span><input type='text' name='orderInfo[shipFirstName]' class='stored' disabled='disabled'><br></label> \
@@ -191,7 +147,7 @@ $( "<div style='display: none'> \
 <input type='hidden' id='commerceOrder' name='orderInfo[commerceOrder]' value=''> \
 <input type='hidden' id='distributor' name='orderInfo[distributor]' value='bt'> \
 <input class='button' type='submit' id='soSubmit'> \
-<input class='button' type='submit' class='specialOrder' id='stockButton' value='Order for Stock' style='margin-right: 1ex; background: gray; text-shadow: 1px 1px 1px #333;'> \
+<input class='button' type='submit' class='specialOrder' id='stockButton' value='Order for Stock'> \
 </form></div></div>" ).appendTo( 'body' );
 
 // Inject stylesheets for the special order form into the page
@@ -209,7 +165,7 @@ document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
 
 // The HTML for the special order form button
 if ( true ) {
-	$( ".ms-sitemapdirectional" ).before( '<div style="float: right; margin: 0 0 1em 1em;"><p style="font-weight: bold; margin: 0.5em 0; text-align: left;"><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
+	$( ".ms-sitemapdirectional" ).before( '<div class="soButton-bt"><p><a class="specialOrder" id="soFormButton" href="#specialOrder" title="Special Order" accesskey="s">Special Order</a></p></div>' );
 }
 
 //////////////////////////
@@ -286,30 +242,26 @@ $(document).ready(function() {
 		// Process the form data so we can POST it
 		var formData = $.param( $(this).serializeArray() );
 
-		// Send the HTTP POST with the form data
-		GM_xmlhttpRequest({
-			method      : "POST",
-			url         : "/special-order.php",
-			data        : formData,
-			headers     : { "Content-Type": "application/x-www-form-urlencoded" },
-			dataType    : "json",
-			encode      : true,
-			onprogress  : function() { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-							Sending...</h1>" ); },
-			onload      : function( response ) { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-							Success!</h1>" );
-							$.colorbox.close(); },
-			onerror     : function( response ) { console.log( response.responseText ); }
-		})
+		// Make sure we want to submit the form
+		if ( ( !confirm( "Submit the special order?" ) ) ) {
+			// Send the HTTP POST with the form data
+			GM_xmlhttpRequest({
+				method      : "POST",
+				url         : remoteServerUrl + "/special-order.php",
+				data        : formData,
+				headers     : { "Content-Type": "application/x-www-form-urlencoded" },
+				dataType    : "json",
+				encode      : true,
+				onprogress  : function() { $( "#specialOrder" )
+								.html( "<h1 class='ajaxStatus'>Sending...</h1>" ); },
+				onload      : function(response) { $( "#specialOrder" )
+								.html( "<h1 class='ajaxStatus'>Success!</h1>" );
+								$.colorbox.close(); },
+				onerror     : function(response) { console.log( response.responseText ); }
+			})
+		}
 	});
 });
-
-//////////////////////////
-//   Page indicators    //
-//////////////////////////
-
-// Check to see if the discount is a normal, wholesale discount and set the variable accordingly.
-$discountReg = $( '#discountPercentLiteral:contains("43")' ).length > 0 ? true : false;
 
 //////////////////////////
 //   Apply formatting   //
@@ -335,16 +287,16 @@ $(document).ready(function() {
 		// Send the HTTP POST with the form data
 		GM_xmlhttpRequest({
 			method      : "POST",
-			url         : "https://web.haslams/order-for-stock.php",
+			url         : remoteServerUrl + "/order-for-stock.php",
 			data        : formData,
 			headers		: { "Content-Type": "application/x-www-form-urlencoded" },
 			dataType    : "json",
 			encode      : true,
-			onprogress	: function() { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-						   Sending...</h1>" ); },
-			onload		: function( response ) { $( "#specialOrder" ).html( "<h1 style='height: 100%; vertical-align: center; font-size: 3em; text-align: center; color: #444;'>\
-						   Success!</h1>" );
-						   $.colorbox.close(); },
+			onprogress	: function() { $( "#specialOrder" )
+							.html( "<h1 class='ajaxStatus'>Sending...</h1>" ); },
+			onload		: function( response ) { $( "#specialOrder" )
+							.html( "<h1 class='ajaxStatus'>Success!</h1>" );
+						    $.colorbox.close(); },
 			onerror		: function( response ) { console.log( response.responseText ); }
 		})
 	});

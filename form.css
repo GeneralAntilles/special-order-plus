@@ -194,6 +194,49 @@ label.checkbox {
 	opacity: 0.3;
 }
 
+.ajaxStatus {
+	height: 100%;
+	vertical-align: center;
+	font-size: 3em;
+	text-align: center;
+	color: #444;
+}
+
+.colorboxDiv {
+	display: none;
+}
+
+.formLeft {
+	float: left;
+	width: 50%;
+}
+
+.formRight {
+	float: right;
+	width: 50%;
+}
+
+.soButton {
+	margin: 0 0 1em 1em;
+}
+
+.soButton p {
+	font-weight: bold;
+	margin: 0.5em 0;
+	text-align: left;
+}
+
+.soButton-bt {
+	float: right;
+	margin: 0 0 1em 1em;"
+}
+
+.stockButton {
+	margin-right: 1ex;
+	background: gray;
+	text-shadow: 1px 1px 1px #333;
+}
+
 #instructions {
 	margin-top: 1em;
 	width: 100%;
@@ -206,4 +249,10 @@ label.checkbox {
 	margin: 0;
 	padding: 0;
 	line-height: 120%;
+}
+
+#specialOrder {
+	display: block;
+	background-color: white;
+	padding: 1em;
 }
