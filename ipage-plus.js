@@ -45,38 +45,38 @@ var $availableUS = $( 'p:contains("Available in some countries but not the Unite
 var $returnable = $( 'p:contains("This item is Not Returnable")' ).length > 0 ? false : true;
 
 // Grab the ISBN from the table
-var $orderInfo.isbn = $( ".productDetailElements" ).first().contents().filter(function() {
+$orderInfo.isbn = $( ".productDetailElements" ).first().contents().filter(function() {
 	return this.nodeType == 3;
 }).text().substring( 1,11 );
 
 // Grab Ingram's ttlid for the entry from the HTML
-var $orderInfo.ttlid = $( "[name='ttlid']" ).attr( "value" );
+$orderInfo.ttlid = $( "[name='ttlid']" ).attr( "value" );
 
 // Get the binding information
-var $orderInfo.binding = $.trim( $( ".productDetailElements:contains('Binding')" ).contents().filter(function() {
+$orderInfo.binding = $.trim( $( ".productDetailElements:contains('Binding')" ).contents().filter(function() {
 	return this.nodeType == 3;
 }).text());
 
 // Get the BISAC categories from the page
-var $orderInfo.bisacCategories = $.trim( $( ".productDetailSmallElements:contains('BISAC')" ).text().replace( /BISAC.*\s*/, "" ).replace( /\s*\|\s*/g, ", " ) );
+$orderInfo.bisacCategories = $.trim( $( ".productDetailSmallElements:contains('BISAC')" ).text().replace( /BISAC.*\s*/, "" ).replace( /\s*\|\s*/g, ", " ) );
 
 // Get the LC subject categories from the page
-var $orderInfo.lcSubjects = $.trim( $( "strong:contains('LC Subjects:')" ).next().next().text() ).replace( /\s*-/g, ", " ).substr( 1 );
+$orderInfo.lcSubjects = $.trim( $( "strong:contains('LC Subjects:')" ).next().next().text() ).replace( /\s*-/g, ", " ).substr( 1 );
 
 // Get the physical attributes from the page
-var $orderInfo.physical = $.trim( $( '.productDetailSmallElements:contains("Physical Info")' ).text().replace( /Physical Info: /, "" ) );
+$orderInfo.physical = $.trim( $( '.productDetailSmallElements:contains("Physical Info")' ).text().replace( /Physical Info: /, "" ) );
 
 // Get the carton quantity from the page
-var $orderInfo.cartonQuantity = $.trim( $( '.productDetailSmallElements:contains("Carton")' ).text().replace( /Carton Quantity: /, "" ) );
+$orderInfo.cartonQuantity = $.trim( $( '.productDetailSmallElements:contains("Carton")' ).text().replace( /Carton Quantity: /, "" ) );
 
 // Get the long description from the page
-var $orderInfo.longDescription = $.trim( $( "#reviewsBox" ).text() );
+$orderInfo.longDescription = $.trim( $( "#reviewsBox" ).text() );
 
 // Get the availability info from the page
-var $orderInfo.tnAvail = $( ".scLightRow" ).first().text();
-var $orderInfo.tnOrder = $( ".scLightRow" ).eq(1).text();
-var $orderInfo.paAvail = $( ".scDarkRow" ).first().text();
-var $orderInfo.paOrder = $( ".scDarkRow" ).eq(1).text();
+$orderInfo.tnAvail = $( ".scLightRow" ).first().text();
+$orderInfo.tnOrder = $( ".scLightRow" ).eq(1).text();
+$orderInfo.paAvail = $( ".scDarkRow" ).first().text();
+$orderInfo.paOrder = $( ".scDarkRow" ).eq(1).text();
 
 //////////////////////////
 //      Formatting      //
