@@ -135,18 +135,6 @@ $( "<div class='colorboxDiv'> \
 <input class='button' type='submit' class='specialOrder' id='stockButton' value='Order for Stock'> \
 </form></div></div>" ).appendTo( 'body' );
 
-// Insert the hidden form fields
-for ( var i = 0; i < Object.size( $orderInfo ); i++ ) {
-	var orderInfoIndex = Object.keys( $orderInfo );
-	$( "#hiddenInfo" ).append( "<input type='hidden' id='" + orderInfoIndex[ i ] + "' name='orderInfo[" + orderInfoIndex[ i ] + "]' value=''>" );
-}
-
-// Fill the values of the hidden form fields
-for ( var i = 0; i < Object.size( $orderInfo ); i++ ) {
-	var orderInfoIndex = Object.keys( $orderInfo );
-    $( "#" + orderInfoIndex[ i ] ).val( $orderInfo[ orderInfoIndex[ i ] ] );
-}
-
 // Inject stylesheets for the special order form into the page
 var link = window.document.createElement( "link" );
 link.rel = "stylesheet";
@@ -314,6 +302,18 @@ $(document).ready(function(){
 						for ( var i = 0; i < 8; i++ ) {
 							$orderInfo[ $csvIndex[ i ] ] = $ttlidCSV[ i ]; 
 							$( "#" + $csvIndex[ i ] ).val( $orderInfo[ $csvIndex[ i ] ] );
+						}
+						
+						// Insert the hidden form fields
+						for ( var i = 0; i < Object.size( $orderInfo ); i++ ) {
+							var orderInfoIndex = Object.keys( $orderInfo );
+							$( "#hiddenInfo" ).append( "<input type='hidden' id='" + orderInfoIndex[ i ] + "' name='orderInfo[" + orderInfoIndex[ i ] + "]' value=''>" );
+						}
+
+						// Fill the values of the hidden form fields
+						for ( var i = 0; i < Object.size( $orderInfo ); i++ ) {
+							var orderInfoIndex = Object.keys( $orderInfo );
+							$( "#" + orderInfoIndex[ i ] ).val( $orderInfo[ orderInfoIndex[ i ] ] );
 						}
 					  },
 		error       : function( jqXhr, textStatus, errorThrown ){
