@@ -15,6 +15,8 @@
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @grant       GM_xmlhttpRequest
+// @grant       GM_setValue
+// @grant       GM_getValue
 // ==/UserScript==
 
 //////////////////////////
@@ -22,7 +24,10 @@
 //////////////////////////
 
 // Remote web server URL
-var remoteServerUrl = "https://example.com/";
+var remoteServerUrl = setRemoteServerUrl( "example.com" );
+
+// Set the printer selection
+$( "#printers" ).val( GM_getValue( "defaultPrinter" );
 
 //////////////////////////
 //      Variables       //
@@ -107,9 +112,7 @@ $( "<div class='colorboxDiv'> \
 <label class='checkbox'><input type='checkbox' name='orderInfo[paid]' accesskey='p' value='Paid'>Paid<br></label> \
 <input type='hidden' value='Off' name='orderInfo[stock]'> \
 <label class='checkbox'><input type='checkbox' name='orderInfo[stock]' accesskey='i' value='Stock'>Stock<br></label> \
-<label><span>Printer: </span><select name='orderInfo[printer]'> \
-  <option value='Brother_HL-5470DW'>Front desk - Brother HL-5470DW</option> \
-  <option value='Brother_HL-2270DW'>Warehouse - Brother HL-2270DW</option> \
+<label><span>Printer: </span><select name='orderInfo[printer]' id='printers'> \
 </select></label> \
 </div> \
 <div class='formRight'> \
@@ -225,6 +228,9 @@ $(document).ready(function () {
 $(document).ready(function() {
 	$( "#specialOrderForm" ).submit(function(e) {
 		e.preventDefault();
+		
+		// Set the printer default based on the last selection
+		GM_setValue( "defaultPrinter", $( "#printer" ).val() );
 
 		// Process the form data so we can POST it
 		var formData = $.param( $(this).serializeArray() );
@@ -274,6 +280,34 @@ if ( !$availableUS ) {
 if ( !$discountReg ) {
 	$( "body" ).addClass( "cantBuy" );
 }
+
+//////////////////////////
+//   Query server info  //
+//////////////////////////
+
+// Send the POST request for the printer list
+$(document).ready(function(){
+	GM_xmlhttpRequest({
+		url         : remoteServerUrl + "/printers.php",
+		dataType    : "json",
+		method      : "post",
+		headers     : { "Content-Type": "application/x-www-form-urlencoded" },
+        encode      : true,
+		onload      : function( response, textStatus, jQxhr ){
+						// Feed the JSON response into an array
+						var printers = JSON.parse( response.responseText );
+
+						// Insert the printer options
+						for ( var i = 0; i < 3; i++ ) {
+							$( "#printers" ).append( "<option value='" + printers[ i ] + "'>" + printers[ i ] + "</option>" );
+						}
+					  },
+		onerror     : function( jqXhr, textStatus, errorThrown ){
+						console.log( "Printer list request error" );
+						console.log( errorThrown );
+					  }
+	});
+});
 
 //////////////////////////
 //    Query for CSV     //
@@ -328,6 +362,9 @@ $(document).ready(function(){
 $(document).ready(function() {
 	$( "#stockButton" ).click(function( e ) {
 		e.preventDefault();
+		
+		// Set the printer default based on the last selection
+		GM_setValue( "defaultPrinter", $( "#printer" ).val() );
 
 		// Process the form data so we can POST it
 		var formData = $.param( $( "#specialOrderForm" ).serializeArray() );
