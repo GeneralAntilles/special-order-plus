@@ -80,3 +80,28 @@ function archiveLocalStorage() {
 		});
 	};
 })(jQuery);
+
+//////////////////////////
+//      Settings        //
+//////////////////////////
+
+/**
+ * Check the remote server URL
+ * @param  {string} settingName Remote server URL setting name
+ * @return {string}
+ */
+function setRemoteServerUrl( remoteServerUrl ) {
+	if ( !endsWith( remoteServerUrl, "/" ) ) {
+		GM_setValue( "remoteServerUrl", remoteServerUrl + "/" );
+		remoteServerUrl = GM_getValue( "remoteServerUrl" );
+	}
+
+	if ( !remoteServerUrl.match( /^https:\/\// ) ) {
+		GM_setValue( "remoteServerUrl", "https://" + remoteServerUrl );
+		remoteServerUrl = GM_getValue( "remoteServerUrl" );
+	}
+	
+	GM_setValue( "remoteServerUrl", remoteServerUrl );
+	
+	return remoteServerUrl;
+}

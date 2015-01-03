@@ -15,14 +15,42 @@
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @grant       GM_xmlhttpRequest
+// @grant       GM_setValue
+// @grant       GM_getValue
 // ==/UserScript==
+
+function setSelected( selectId, valueToSelect ) {    
+    var element = document.getElementById( selectId );
+    console.log (element);
+    element.value = valueToSelect;
+    console.log (element);
+}
+
+
+function setRemoteServerUrl( remoteServerUrl ) {
+	if ( !endsWith( remoteServerUrl, "/" ) ) {
+		GM_setValue( "remoteServerUrl", remoteServerUrl + "/" );
+		remoteServerUrl = GM_getValue( "remoteServerUrl" );
+	}
+
+	if ( !remoteServerUrl.match( /^https:\/\// ) ) {
+		GM_setValue( "remoteServerUrl", "https://" + remoteServerUrl );
+		remoteServerUrl = GM_getValue( "remoteServerUrl" );
+	}
+	
+	GM_setValue( "remoteServerUrl", remoteServerUrl );
+	
+	return remoteServerUrl;
+}
+
+setSelected( "printers", "HP-Color-LaserJet-2605dn" );
 
 //////////////////////////
 //      Settings        //
 //////////////////////////
 
 // Remote web server URL
-var remoteServerUrl = "https://example.com/";
+var remoteServerUrl = setRemoteServerUrl( "example.com" );
 
 //////////////////////////
 //      Variables       //
@@ -107,9 +135,7 @@ $( "<div class='colorboxDiv'> \
 <label class='checkbox'><input type='checkbox' name='orderInfo[paid]' accesskey='p' value='Paid'>Paid<br></label> \
 <input type='hidden' value='Off' name='orderInfo[stock]'> \
 <label class='checkbox'><input type='checkbox' name='orderInfo[stock]' accesskey='i' value='Stock'>Stock<br></label> \
-<label><span>Printer: </span><select name='orderInfo[printer]'> \
-  <option value='Brother_HL-5470DW'>Front desk - Brother HL-5470DW</option> \
-  <option value='Brother_HL-2270DW'>Warehouse - Brother HL-2270DW</option> \
+<label><span>Printer: </span><select name='orderInfo[printer]' id='printers'> \
 </select></label> \
 </div> \
 <div class='formRight'> \
@@ -225,6 +251,9 @@ $(document).ready(function () {
 $(document).ready(function() {
 	$( "#specialOrderForm" ).submit(function(e) {
 		e.preventDefault();
+		
+		// Set the printer default based on the last selection
+		GM_setValue( "defaultPrinter", $( "#printer" ).val() );
 
 		// Process the form data so we can POST it
 		var formData = $.param( $(this).serializeArray() );
@@ -347,5 +376,29 @@ $(document).ready(function() {
 						    $.colorbox.close(); },
 			onerror		: function( response ) { console.log( response.responseText ); }
 		})
+	});
+});
+
+// Send the POST request for the printer list
+$(document).ready(function(){
+	GM_xmlhttpRequest({
+		url         : remoteServerUrl + "/printers.php",
+		dataType    : "json",
+		method      : "post",
+		headers     : { "Content-Type": "application/x-www-form-urlencoded" },
+        encode      : true,
+		onload      : function( response, textStatus, jQxhr ){
+						// Feed the JSON response into an array
+						var printers = JSON.parse( response.responseText );
+
+						// Insert the printer options
+						for ( var i = 0; i < 3; i++ ) {
+							$( "#printers" ).append( "<option value='" + printers[ i ] + "'>" + printers[ i ] + "</option>" );
+						}
+					  },
+		onerror     : function( jqXhr, textStatus, errorThrown ){
+						console.log( "Printer list request error" );
+						console.log( errorThrown );
+					  }
 	});
 });
