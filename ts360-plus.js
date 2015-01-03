@@ -240,7 +240,7 @@ $(document).ready(function() {
 		var formData = $.param( $(this).serializeArray() );
 
 		// Make sure we want to submit the form
-		if ( ( !confirm( "Submit the special order?" ) ) ) {
+		if ( ( confirm( "Submit the special order?" ) ) ) {
 			// Send the HTTP POST with the form data
 			GM_xmlhttpRequest({
 				method      : "POST",
