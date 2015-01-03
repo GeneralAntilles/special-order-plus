@@ -19,38 +19,15 @@
 // @grant       GM_getValue
 // ==/UserScript==
 
-function setSelected( selectId, valueToSelect ) {    
-    var element = document.getElementById( selectId );
-    console.log (element);
-    element.value = valueToSelect;
-    console.log (element);
-}
-
-
-function setRemoteServerUrl( remoteServerUrl ) {
-	if ( !endsWith( remoteServerUrl, "/" ) ) {
-		GM_setValue( "remoteServerUrl", remoteServerUrl + "/" );
-		remoteServerUrl = GM_getValue( "remoteServerUrl" );
-	}
-
-	if ( !remoteServerUrl.match( /^https:\/\// ) ) {
-		GM_setValue( "remoteServerUrl", "https://" + remoteServerUrl );
-		remoteServerUrl = GM_getValue( "remoteServerUrl" );
-	}
-	
-	GM_setValue( "remoteServerUrl", remoteServerUrl );
-	
-	return remoteServerUrl;
-}
-
-setSelected( "printers", "HP-Color-LaserJet-2605dn" );
-
 //////////////////////////
 //      Settings        //
 //////////////////////////
 
 // Remote web server URL
 var remoteServerUrl = setRemoteServerUrl( "example.com" );
+
+// Set the printer selection
+$( "#printers" ).val( GM_getValue( "defaultPrinter" );
 
 //////////////////////////
 //      Variables       //
@@ -305,6 +282,34 @@ if ( !$discountReg ) {
 }
 
 //////////////////////////
+//   Query server info  //
+//////////////////////////
+
+// Send the POST request for the printer list
+$(document).ready(function(){
+	GM_xmlhttpRequest({
+		url         : remoteServerUrl + "/printers.php",
+		dataType    : "json",
+		method      : "post",
+		headers     : { "Content-Type": "application/x-www-form-urlencoded" },
+        encode      : true,
+		onload      : function( response, textStatus, jQxhr ){
+						// Feed the JSON response into an array
+						var printers = JSON.parse( response.responseText );
+
+						// Insert the printer options
+						for ( var i = 0; i < 3; i++ ) {
+							$( "#printers" ).append( "<option value='" + printers[ i ] + "'>" + printers[ i ] + "</option>" );
+						}
+					  },
+		onerror     : function( jqXhr, textStatus, errorThrown ){
+						console.log( "Printer list request error" );
+						console.log( errorThrown );
+					  }
+	});
+});
+
+//////////////////////////
 //    Query for CSV     //
 //////////////////////////
 
@@ -357,6 +362,9 @@ $(document).ready(function(){
 $(document).ready(function() {
 	$( "#stockButton" ).click(function( e ) {
 		e.preventDefault();
+		
+		// Set the printer default based on the last selection
+		GM_setValue( "defaultPrinter", $( "#printer" ).val() );
 
 		// Process the form data so we can POST it
 		var formData = $.param( $( "#specialOrderForm" ).serializeArray() );
@@ -376,29 +384,5 @@ $(document).ready(function() {
 						    $.colorbox.close(); },
 			onerror		: function( response ) { console.log( response.responseText ); }
 		})
-	});
-});
-
-// Send the POST request for the printer list
-$(document).ready(function(){
-	GM_xmlhttpRequest({
-		url         : remoteServerUrl + "/printers.php",
-		dataType    : "json",
-		method      : "post",
-		headers     : { "Content-Type": "application/x-www-form-urlencoded" },
-        encode      : true,
-		onload      : function( response, textStatus, jQxhr ){
-						// Feed the JSON response into an array
-						var printers = JSON.parse( response.responseText );
-
-						// Insert the printer options
-						for ( var i = 0; i < 3; i++ ) {
-							$( "#printers" ).append( "<option value='" + printers[ i ] + "'>" + printers[ i ] + "</option>" );
-						}
-					  },
-		onerror     : function( jqXhr, textStatus, errorThrown ){
-						console.log( "Printer list request error" );
-						console.log( errorThrown );
-					  }
 	});
 });

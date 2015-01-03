@@ -87,7 +87,7 @@ function archiveLocalStorage() {
 
 /**
  * Check the remote server URL
- * @param  {string} settingName Remote server URL setting name
+ * @param  {string} remoteServerUrl Remote server URL
  * @return {string}
  */
 function setRemoteServerUrl( remoteServerUrl ) {
