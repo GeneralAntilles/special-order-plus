@@ -7,15 +7,12 @@
 // @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
 // @include     http*://ts360.baker-taylor.com/_layouts/CommerceServer/ItemDetailsPage.aspx?*
 // @run-at      document-end
-// @require     https://code.jquery.com/jquery-latest.js
+// @require     https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @require     https://raw.githubusercontent.com/jackmoore/colorbox/master/jquery.colorbox-min.js
 // @require     https://thousandsparrows.com/js/jquery.csv-0.71.js
 // @require     https://raw.githubusercontent.com/digitalBush/jquery.maskedinput/1.4.0/dist/jquery.maskedinput.min.js
 // @require     https://gist.github.com/raw/2625891/waitForKeyElements.js
 // @require     https://thousandsparrows.com/js/special-order-plus.js
-// @resource    https://thousandsparrows.com/js/colorbox/colorbox.css
-// @resource    https://thousandsparrows.com/jquery.form.min.js
-// @resource    https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @grant       GM_xmlhttpRequest
