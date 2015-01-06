@@ -27,7 +27,7 @@
 var remoteServerUrl = setRemoteServerUrl( "example.com" );
 
 // Set the printer selection
-$( "#printers" ).val( GM_getValue( "defaultPrinter" );
+$( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
 
 //////////////////////////
 //      Variables       //
