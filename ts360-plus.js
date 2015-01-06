@@ -16,6 +16,8 @@
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @grant       GM_xmlhttpRequest
+// @grant       GM_setValue
+// @grant       GM_getValue
 // @grant       unsafeWindow
 // ==/UserScript==
 
@@ -26,49 +28,55 @@
 // Remote web server URL
 var remoteServerUrl = "https://example.com/";
 
+// Set the printer selection
+$( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
+
 //////////////////////////
 //      Variables       //
 //////////////////////////
 
-// Check to see if the discount is a normal, wholesale discount and set the variable accordingly.
-var $discountReg = $( '#discountPercentLiteral:contains("43")' ).length > 0 ? true : false;
+// Object to contain the title info
+var $orderInfo = {};
 
-// Is it returnable?
-var $returnable;
+// Check to see if the discount is a normal, wholesale discount and set the variable
+var $discountReg = $( '#discountPercentLiteral:contains("43")' ).length > 0 ? true : false;
 
 // Is it available in the US?
 var $availableUS;
 
-var $bookInfoIndex = [];
-var $bookInfo = {};
+// Is it returnable?
+var $returnable;
+
+var $orderInfoIndex = [];
+var $orderInfo = {};
 
 // Wait until the window DOM is loaded, then start grabbing info
 $(window).load(function() {
 	// Grab a variety of info about the current title
-	$bookInfo.ean13 = $.trim( $( '.col1:contains("ISBN:")' ).next().text() );
-	$bookInfo.title = $( '#ctl00_BrowseBodyInner_ProductDetailsUserControl_lblTitle' ).text();
-	$bookInfo.publisher = $.trim( $( '.col1:contains("Publisher:")' ).next().text() );
-	$bookInfo.binding = $.trim( $( '#ctl00_BrowseBodyInner_ProductDetailsUserControl_formatLiteral' ).text() );
-	$bookInfo.date = $.trim( $( '.col3:contains("Street Date")' ).next().text() );
-	$bookInfo.authors = $( "#ctl00_BrowseBodyInner_ProductDetailsUserControl_authors" ).text().split( "/" );
+	$orderInfo.ean13 = $.trim( $( '.col1:contains("ISBN:")' ).next().text() );
+	$orderInfo.title = $( '#ctl00_BrowseBodyInner_ProductDetailsUserControl_lblTitle' ).text();
+	$orderInfo.publisher = $.trim( $( '.col1:contains("Publisher:")' ).next().text() );
+	$orderInfo.binding = $.trim( $( '#ctl00_BrowseBodyInner_ProductDetailsUserControl_formatLiteral' ).text() );
+	$orderInfo.date = $.trim( $( '.col3:contains("Street Date")' ).next().text() );
+	$orderInfo.authors = $( "#ctl00_BrowseBodyInner_ProductDetailsUserControl_authors" ).text().split( "/" );
 
 	// If we have multiple authors, we want to put them in an array
-	$.each($bookInfo.authors, function( k, v ) {
-		$bookInfo.authors[ k ] = $.trim( v );
+	$.each($orderInfo.authors, function( k, v ) {
+		$orderInfo.authors[ k ] = $.trim( v );
 	});
 
 	// Also set the primary author
-	$bookInfo.author = $bookInfo.authors[ 0 ];
-	$bookInfo.price = "$" + unsafeWindow.id_listprice.slice( 0, -2 );
+	$orderInfo.author = $orderInfo.authors[ 0 ];
+	$orderInfo.price = "$" + unsafeWindow.id_listprice.slice( 0, -2 );
 
 	// Build the ISBN from the ISBN-13
-	$bookInfo.isbn = $bookInfo.ean13.substring( 3 ).substring( 0, 9 );
-	$bookInfo.isbn = $bookInfo.isbn + isbnCheckDigit( $bookInfo.isbn );
+	$orderInfo.isbn = $orderInfo.ean13.substring( 3 ).substring( 0, 9 );
+	$orderInfo.isbn = $orderInfo.isbn + isbnCheckDigit( $orderInfo.isbn );
 
 	// Set the hidden form fields with the data we just grabbed
-	$bookInfoIndex = Object.keys( $bookInfo );
-	for( var i = 0; i < $bookInfoIndex.length; i++ ) {
-		$( "#" + $bookInfoIndex[ i ] ).val( $bookInfo[ $bookInfoIndex[ i ] ] );
+	$orderInfoIndex = Object.keys( $orderInfo );
+	for( var i = 0; i < $orderInfoIndex.length; i++ ) {
+		$( "#" + $orderInfoIndex[ i ] ).val( $orderInfo[ $orderInfoIndex[ i ] ] );
 	}
 });
 
@@ -148,17 +156,8 @@ $( "<div class='colorboxDiv'> \
 </form></div></div>" ).appendTo( 'body' );
 
 // Inject stylesheets for the special order form into the page
-var link = window.document.createElement( "link" );
-link.rel = "stylesheet";
-link.type = "text/css";
-link.href = "https://thousandsparrows.com/js/colorbox/colorbox.css";
-document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
-
-var link = window.document.createElement( "link" );
-link.rel = "stylesheet";
-link.type = "text/css";
-link.href = "https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css";
-document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
+$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://thousandsparrows.com/js/colorbox/colorbox.css'/>" );
+$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css'/>" );
 
 // The HTML for the special order form button
 if ( true ) {
@@ -205,26 +204,12 @@ $(document).ready(function() {
 
 // Store the form data to local storage when the form is submitted 
 $(document).ready(function() {
-	$( "#soSubmit" ).click(function(e) {
-		archiveLocalStorage();
-	});
+	$( "#soSubmit" ).click( archiveToLocalStorage( $(this) ) );
 });
 
 // If the first name is an '=', then retrieve local storage and fill the form
 $(document).ready(function () {
-	$( "#firstName" ).keyup(function () {
-		if ( $(this).val() == "=" ) {
-			for ( var i = 0; i < localStorage.length; i++ ) {
-				$( "[name='" + localStorage.key(i) + "']" ).val( localStorage.getItem( localStorage.key( i ) ) );
-			}
-
-			if ( localStorage.getItem( "orderInfo[shipFirstName]" ) ) {
-				$( ".ship" ).toggleClass( "no-ship" );
-				$( "[name*='orderInfo[ship']" ).toggleDisabled();
-				$( "#shipCheck" ).prop( "checked", true );
-			}
-		}
-	});
+	$( "#firstName" ).keyup( fillFromLocalStorage( $(this) ) );
 });
 
 //////////////////////////
@@ -233,31 +218,13 @@ $(document).ready(function () {
 
 // AJAX to submit the form data
 $(document).ready(function() {
-	$( "#specialOrderForm" ).submit(function(e) {
-		e.preventDefault();
+	$( "#specialOrderForm" ).submit( function( event ) { ajaxSpecialOrder( remoteServerUrl, event, $(this) ); } );
+});
 
-		// Process the form data so we can POST it
-		var formData = $.param( $(this).serializeArray() );
+// AJAX for Order for Stock button
+$(document).ready(function() {
+	$( "#stockButton" ).click( function( event ) { ajaxOrderForStock( remoteServerUrl, event, $(this) ); } );
 
-		// Make sure we want to submit the form
-		if ( ( confirm( "Submit the special order?" ) ) ) {
-			// Send the HTTP POST with the form data
-			GM_xmlhttpRequest({
-				method      : "POST",
-				url         : remoteServerUrl + "/special-order.php",
-				data        : formData,
-				headers     : { "Content-Type": "application/x-www-form-urlencoded" },
-				dataType    : "json",
-				encode      : true,
-				onprogress  : function() { $( "#specialOrder" )
-								.html( "<h1 class='ajaxStatus'>Sending...</h1>" ); },
-				onload      : function(response) { $( "#specialOrder" )
-								.html( "<h1 class='ajaxStatus'>Success!</h1>" );
-								$.colorbox.close(); },
-				onerror     : function(response) { console.log( response.responseText ); }
-			})
-		}
-	});
 });
 
 //////////////////////////
@@ -270,31 +237,10 @@ if ( !$discountReg ) {
 }
 
 //////////////////////////
-//       Testing        //
+//   Query server info  //
 //////////////////////////
 
-// AJAX for Order for Stock button
-$(document).ready(function() {
-	$( "#stockButton" ).click(function(e) {
-		e.preventDefault();
-
-		// Process the form data so we can POST it
-		var formData = $.param( $( "#specialOrderForm" ).serializeArray() );
-
-		// Send the HTTP POST with the form data
-		GM_xmlhttpRequest({
-			method      : "POST",
-			url         : remoteServerUrl + "/order-for-stock.php",
-			data        : formData,
-			headers		: { "Content-Type": "application/x-www-form-urlencoded" },
-			dataType    : "json",
-			encode      : true,
-			onprogress	: function() { $( "#specialOrder" )
-							.html( "<h1 class='ajaxStatus'>Sending...</h1>" ); },
-			onload		: function( response ) { $( "#specialOrder" )
-							.html( "<h1 class='ajaxStatus'>Success!</h1>" );
-						    $.colorbox.close(); },
-			onerror		: function( response ) { console.log( response.responseText ); }
-		})
-	});
+// Send the POST request for the printer list
+$(document).ready(function(){
+	getPrinterList( remoteServerUrl );
 });
