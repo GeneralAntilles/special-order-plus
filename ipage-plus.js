@@ -28,20 +28,23 @@
 // Remote web server URL
 var remoteServerUrl = "https://web.haslams/";
 
+// Set the printer selection
+$( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
+
 //////////////////////////
 //      Variables       //
 //////////////////////////
 
-// Index for the CSV we're getting from Ingram
+// Object to contain the title info
 var $orderInfo = {};
 
 // Check to see if the discount is a normal, wholesale discount and set the variable.
 var $discountReg = $( 'div:contains("REG")' ).length > 0 || $( 'div:contains("45%")' ).length > 0 ? true : false;
 
-// Check to see if it's available
+// Is it available in the US?
 var $availableUS = $( 'p:contains("Available in some countries but not the United States.")' ).length > 0 || $( 'p:contains("Restricted:  Not available to all customers.")' ).length > 0 ? false : true;
 
-// Check to see if it's returnable
+// Is it returnable?
 var $returnable = $( 'p:contains("This item is Not Returnable")' ).length > 0 ? false : true;
 
 // Grab the ISBN from the table
@@ -134,17 +137,8 @@ $( "<div class='colorboxDiv'> \
 </form></div></div>" ).appendTo( 'body' );
 
 // Inject stylesheets for the special order form into the page
-var link = window.document.createElement( "link" );
-link.rel = "stylesheet";
-link.type = "text/css";
-link.href = "https://web.haslams/css/colorbox.css";
-document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
-
-var link = window.document.createElement( "link" );
-link.rel = "stylesheet";
-link.type = "text/css";
-link.href = "https://web.haslams/css/form.css";
-document.getElementsByTagName( "HEAD" )[ 0 ].appendChild( link );
+$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://thousandsparrows.com/js/colorbox/colorbox.css'/>" );
+$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css'/>" );
 
 // Add a link to this entry on Baker & Taylor
 $(document).ready(function() {
@@ -186,6 +180,7 @@ $(document).ready(function() {
 	});
 });
 
+// Input mask for the telephone fields
 $(document).ready(function() {
 	$( "input[type=tel]" ).mask( "(999) 999-9999",{ placeholder:"_" } );
 });
@@ -211,6 +206,11 @@ $(document).ready(function () {
 // AJAX to submit the form data
 $(document).ready(function() {
 	$( "#specialOrderForm" ).submit( function( event ) { ajaxSpecialOrder( remoteServerUrl, event, $(this) ); } );
+});
+
+// AJAX for Order for Stock button
+$(document).ready(function() {
+	$( "#stockButton" ).click( function( event ) { ajaxOrderForStock( remoteServerUrl, event, $(this) ); } );
 });
 
 //////////////////////////
@@ -254,13 +254,4 @@ $(document).ready(function(){
 // Send the POST request for the title listing's CSV and do processing
 $(document).ready(function(){
 	getIngramTitleInfo( $orderInfo.ttlid, $orderInfo );
-});
-
-//////////////////////////
-//       Testing        //
-//////////////////////////
-
-// AJAX for Order for Stock button
-$(document).ready(function() {
-	$( "#stockButton" ).click( function( event ) { ajaxOrderForStock( remoteServerUrl, event, $(this) ); } );
 });
