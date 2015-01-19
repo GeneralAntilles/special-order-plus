@@ -182,6 +182,9 @@ function getPrinterList( remoteServerUrl ) {
 						for ( var i = 0; i < 3; i++ ) {
 							$( "#printers" ).append( "<option value='" + printers[ i ] + "'>" + printers[ i ] + "</option>" );
 						}
+
+						// Set the printer selection
+						$( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
 					  },
 		onerror     : function( jqXhr, textStatus, errorThrown ){
 						console.log( "Printer list request error" );

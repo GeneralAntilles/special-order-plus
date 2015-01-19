@@ -26,9 +26,6 @@
 // Remote web server URL
 var remoteServerUrl = setRemoteServerUrl( "example.com" );
 
-// Set the printer selection
-$( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
-
 //////////////////////////
 //      Variables       //
 //////////////////////////
@@ -37,7 +34,10 @@ $( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
 var $orderInfo = {};
 
 // Check to see if the discount is a normal, wholesale discount and set the variable.
-var $discountReg = $( 'div:contains("REG")' ).length > 0 || $( 'div:contains("45%")' ).length > 0 ? true : false;
+var $discountReg = $( 'div:contains("REG")' ).length > 0 ||
+                   $( 'div:contains("45%")' ).length > 0 ||
+                   $( 'div:contains("LOW")' ).length > 0 ?
+                   true : false;
 
 // Is it available in the US?
 var $availableUS = $( 'p:contains("Available in some countries but not the United States.")' ).length > 0 || $( 'p:contains("Restricted:  Not available to all customers.")' ).length > 0 ? false : true;
