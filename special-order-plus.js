@@ -177,11 +177,15 @@ function getPrinterList( remoteServerUrl ) {
 		onload      : function( response, textStatus, jQxhr ){
 						// Feed the JSON response into an array
 						var printers = JSON.parse( response.responseText );
-
+						var printersKeys = Object.keys( printers );
+						
 						// Insert the printer options
-						for ( var i = 0; i < 3; i++ ) {
-							$( "#printers" ).append( "<option value='" + printers[ i ] + "'>" + printers[ i ] + "</option>" );
+						for ( var i = printersKeys.length; i < 3; i++ ) {
+							$( "#printers" ).append( "<option value='" + printersKeys[ i ] + "'>" + printers[ printersKeys[ i ] ] + "</option>" );
 						}
+
+						// Set the printer selection
+						$( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
 					  },
 		onerror     : function( jqXhr, textStatus, errorThrown ){
 						console.log( "Printer list request error" );

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        ipage+
 // @namespace   http://www.haslams.com/
-// @version     0.6
+// @version     0.6.1
 // @description Ingram ipage usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
 // @downloadURL https://web.haslams/js/ipage-plus.js
@@ -28,9 +28,6 @@
 // Remote web server URL
 var remoteServerUrl = "https://web.haslams/";
 
-// Set the printer selection
-$( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
-
 //////////////////////////
 //      Variables       //
 //////////////////////////
@@ -39,7 +36,10 @@ $( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
 var $orderInfo = {};
 
 // Check to see if the discount is a normal, wholesale discount and set the variable.
-var $discountReg = $( 'div:contains("REG")' ).length > 0 || $( 'div:contains("45%")' ).length > 0 ? true : false;
+var $discountReg = $( 'div:contains("REG")' ).length > 0 ||
+                   $( 'div:contains("45%")' ).length > 0 ||
+                   $( 'div:contains("LOW")' ).length > 0 ?
+                   true : false;
 
 // Is it available in the US?
 var $availableUS = $( 'p:contains("Available in some countries but not the United States.")' ).length > 0 || $( 'p:contains("Restricted:  Not available to all customers.")' ).length > 0 ? false : true;
@@ -142,7 +142,7 @@ $( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://raw.gi
 
 // Add a link to this entry on Baker & Taylor
 $(document).ready(function() {
-	var btUrl = "http://ts360.baker-taylor.com/pages/searchresults.aspx?keyword=" + $orderInfo.isbn;
+	var btUrl = "http://ts360.baker-taylor.com/_layouts/CommerceServer/QuickSearch.aspx?keyword=" + $orderInfo.isbn;
 	$( "<a href='" + btUrl + "' accesskey='b' target='_blank'>Check on B&T</a>" ).appendTo( "body" );
 });
 

@@ -30,9 +30,6 @@
 // Remote web server URL
 var remoteServerUrl = "https://web.haslams/";
 
-// Set the printer selection
-$( "#printers" ).val( GM_getValue( "defaultPrinter" ) );
-
 //////////////////////////
 //      Variables       //
 //////////////////////////

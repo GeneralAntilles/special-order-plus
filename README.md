@@ -2,7 +2,7 @@
 
 # Purpose
 
-Special Order Plus faciliates taking special orders through the [Ingram ipage](https://ipage.ingramcontent.com/) and [Baker & Taylor Title Source 360](https://ts360.baker-taylor.com/) web databases by providing a HTML form on these websites and a printing backend.
+Special Order Plus facilitates taking special orders through the [Ingram ipage](https://ipage.ingramcontent.com/) and [Baker & Taylor Title Source 360](https://ts360.baker-taylor.com/) web databases by providing a HTML form on these websites and a printing backend.
 
 # Requirements
 
