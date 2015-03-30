@@ -175,10 +175,10 @@ function getPrinterList( remoteServerUrl ) {
 		headers     : { "Content-Type": "application/x-www-form-urlencoded" },
 		encode      : true,
 		onload      : function( response, textStatus, jQxhr ){
-						// Feed the JSON response into an array
-						var printers = JSON.parse( response.responseText );
+		                // Feed the JSON response into an array
+		                var printers = JSON.parse( response.responseText );
 
-						// Insert the printer options
+		                // Insert the printer options
 						for ( var i = 0; i < 3; i++ ) {
 							$( "#printers" ).append( "<option value='" + printers[ i ] + "'>" + printers[ i ] + "</option>" );
 						}
