@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name        ts360+
 // @namespace   http://www.haslams.com/
-// @version     0.6.1
+// @version     0.6.14
 // @description Baker & Taylor usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
-// @downloadURL https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/ipage-plus.js
+// @downloadURL https://web.haslams/js/ts360-plus.user.js
 // @include     http*://ts360.baker-taylor.com/_layouts/CommerceServer/ItemDetailsPage.aspx?*
 // @run-at      document-end
 // @require     https://web.haslams/js/jquery.min.js
@@ -155,8 +155,8 @@ $( "<div class='colorboxDiv'> \
 </form></div></div>" ).appendTo( 'body' );
 
 // Inject stylesheets for the special order form into the page
-$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://thousandsparrows.com/js/colorbox/colorbox.css'/>" );
-$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css'/>" );
+$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://web.haslams/css/colorbox.css'/>" );
+$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://web.haslams/css/form.css'/>" );
 
 // The HTML for the special order form button
 if ( true ) {

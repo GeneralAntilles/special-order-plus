@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        ipage+
 // @namespace   http://www.haslams.com/
-// @version     0.6.13
+// @version     0.6.14
 // @description Ingram ipage usability tweaks for Haslam's Book Store, Inc.
 // @author      Ryan Abel
 // @downloadURL https://web.haslams/js/ipage-plus.js
@@ -137,8 +137,8 @@ $( "<div class='colorboxDiv'> \
 </form></div></div>" ).appendTo( 'body' );
 
 // Inject stylesheets for the special order form into the page
-$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://thousandsparrows.com/js/colorbox/colorbox.css'/>" );
-$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://raw.githubusercontent.com/GeneralAntilles/special-order-plus/master/form.css'/>" );
+$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://web.haslams/css/colorbox.css'/>" );
+$( "head" ).append( "<link rel='stylesheet' type='text/css' href='https://web.haslams/css/form.css'/>" );
 
 // Add a link to this entry on Baker & Taylor
 $(document).ready(function() {
