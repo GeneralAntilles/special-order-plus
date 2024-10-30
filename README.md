@@ -62,8 +62,14 @@ The **PDF is printed** to a network printer using CUPS.
 
 When a client with the appropriate userscripts installed visits a title listing on either Ingram ipage or Baker & Taylor TS360, a special order form button is displayed.
 
-After the page is loaded, the userscript scrapes the data for the current title from the web page and sends a query for an additional data file about the title from their server. This information is then inserted into the special order form. 
+After the page is loaded, the userscript scrapes the data for the current title from the web page and sends a query for an additional data file about the title from their server. This information is then inserted into the special order form.
 
 When the user clicks the special order button, a form with fields for customer and order information is displayed. After the information is filled in and the form is submitted, the data is sent to the web server for processing and printing.
 
 The web server parses and formats the form data from the client and generates an XFDF file from this data. An index number for the special order is generated from a counter file on the web server. An EAN13 barcode is created. All of this data is inserted into a PDF form. Finally, the PDF is printed.
+
+## Disclaimer
+
+This software is an independent, unofficial tool created to enhance the user experience for legitimate users of Baker & Taylor's Title Source 360 and Ingram ipage platforms. It is not affiliated with, endorsed by, or connected to Baker & Taylor or Ingram and either of their subsidiaries in any way. "Baker & Taylor" is a trademark of Baker & Taylor and "Ingram" is a trademark of Ingram Content Group. They are used here solely for descriptive purposes to accurately identify the services this tool interacts with.
+
+This userscript requires users to have legitimate, authorized access to Title Source 360 or ipage and only processes information through the standard web interface. The source code is provided "as is" without warranty of any kind. Users are responsible for ensuring their use complies with Baker & Taylor's and Ingram's terms of service and applicable laws.
